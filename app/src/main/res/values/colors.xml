@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorAlien">#0c400b</color>
+
+    <color name="alienMovie1">#112211</color>
+    <color name="alienMovie2">#005533</color>
+    <color name="alienMovie3">#556666</color>
+    <color name="alienMovie4">#AABBBB</color>
+    <color name="alienMovie5">#778877</color>
+
+    <color name="alienColor1">#201C13</color>
+    <color name="alienColor2">#EBEFF2</color>
+    <color name="alienColor3">#45593C</color>
+    <color name="alienColor4">#BFB169</color>
+    <color name="alienColor5">#37332B</color>
+</resources>

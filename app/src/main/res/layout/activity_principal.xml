@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ep4.carla.survivethealiens.Activity.PrincipalActivity">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewPrincipal"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/desolatedcity"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        />
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        card_view:cardCornerRadius="4dp"
+        android:layout_below="@+id/imageViewPrincipal"
+        >
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textViewTituloMissao"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Última missão"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                />
+
+            <TextView
+                android:id="@+id/textViewMissao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fuja do hospital Albert Einstein"
+                android:layout_marginTop="25dp" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonContinuarMissao"
+                android:src="@drawable/iconplay"
+                android:onClick="retomarMissao"
+                android:layout_alignParentRight="true"
+                android:layout_margin="5dp"
+                />
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/buttonPrimeiraLinha"
+        android:layout_below="@+id/card_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:id="@+id/buttonHistoria"
+            android:layout_width="40dp"
+            android:layout_height="130dp"
+            android:layout_weight="1"
+            android:text="História"
+            android:onClick="abrirHistoria"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            android:padding="12dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            />
+
+        <Button
+            android:id="@+id/buttonOpcoes"
+            android:layout_width="40dp"
+            android:layout_height="130dp"
+            android:layout_weight="1"
+            android:text="Opções"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:padding="12dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/buttonPrimeiraLinha"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:id="@+id/buttonPerfil"
+            android:layout_width="40dp"
+            android:layout_height="130dp"
+            android:layout_weight="1"
+            android:text="Perfil"
+            android:layout_marginBottom="24dp"
+            android:layout_marginRight="10dp"
+            android:padding="12dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            />
+
+        <Button
+            android:id="@+id/buttonAjuda"
+            android:layout_width="40dp"
+            android:layout_height="130dp"
+            android:layout_weight="1"
+            android:text="Ajuda"
+            android:layout_marginBottom="24dp"
+            android:padding="12dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            />
+    </LinearLayout>
+</RelativeLayout>
+
