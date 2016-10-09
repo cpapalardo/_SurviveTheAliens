@@ -1,9 +1,11 @@
 package com.ep4.survivethealiens;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class PrincipalActivity extends AppCompatActivity {
 
@@ -13,4 +15,8 @@ public class PrincipalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_principal);
     }
 
+    public void abrirHistoria(View view) {
+        Intent intent = new Intent(this, HistoriaActivity.class);
+        startActivity(intent);
+    }
 }
