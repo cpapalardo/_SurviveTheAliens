@@ -4,7 +4,7 @@
     xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ep4.carla.survivethealiens.Activity.PrincipalActivity">
+    tools:context="com.ep4.survivethealiens.PrincipalActivity">
 
     <ImageView
         android:layout_width="fill_parent"
@@ -23,6 +23,7 @@
         android:layout_height="60dp"
         card_view:cardCornerRadius="4dp"
         android:layout_below="@+id/imageViewPrincipal"
+        android:onClick="retomarMissao"
         >
         <RelativeLayout
             android:layout_width="wrap_content"

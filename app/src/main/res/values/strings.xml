@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Survive the Aliens</string>
+    <string name="title_activity_cadastro">CadastroActivity</string>
+    <string-array name="generos">
+        <item name="genero">Gênero</item>
+        <item name="feminino">Feminino</item>
+        <item name="masculino">Masculino</item>
+        <item name="outros">Outros</item>
+    </string-array>
+    <string name="title_activity_maps">Map</string>
 </resources>
