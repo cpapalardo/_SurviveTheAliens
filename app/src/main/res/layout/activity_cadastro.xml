@@ -98,7 +98,7 @@
             android:layout_marginBottom="24dp"
             android:padding="12dp"
             android:text="Registrar"
-            android:onClick="autenticar"
+            android:onClick="cadastrar"
             style="@style/Widget.AppCompat.Button.Colored"
             />
 

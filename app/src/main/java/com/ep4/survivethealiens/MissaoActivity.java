@@ -1,6 +1,5 @@
 package com.ep4.survivethealiens;
 
-import android.*;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -9,21 +8,14 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Handler;
-import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -31,13 +23,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -45,16 +35,18 @@ import java.util.TimerTask;
 /**
  * Created by aluno on 07/10/2016.
  */
-public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallback/*, LocationListener, GoogleApiClient.ConnectionCallbacks*/{
+public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener/*, LocationListener, GoogleApiClient.ConnectionCallbacks*/{
 
     MapFragment mapFragment;
     GoogleMap mapa;
-    Location oldLocation, location;
-    String mLastUpdateTime;
-    GoogleApiClient client;
+    Location location;
     GpsTrackerHelper gpsTrackerHelper;
     private static final Handler handler = new Handler();
+    ArrayList<LatLng> pontoList = new ArrayList<LatLng>();
     Context context;
+    Handler m_handler;
+    Runnable m_handlerTask;
+    int times=0;
 
     LocationManager locationManager;
     LocationRequest locationRequest;
@@ -65,7 +57,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_missao);
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
+        mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.fragment_map);
         mapFragment.getMapAsync(this);
 //        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.fragment_map);
@@ -75,11 +67,33 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         //handler.postDelayed(textRunnable, 10000);
         //textRunnable.run();
         timer.schedule(timerTask, 2000, 5000);
+
+        m_handler = new Handler();
+        m_handlerTask = new Runnable()
+        {
+            @Override
+            public void run() {
+                if(times<pontoList.size()-1)
+                {
+                    LatLng src = pontoList.get(times);
+                    LatLng dest = pontoList.get(times + 1);
+                    Polyline line = mapa.addPolyline(new PolylineOptions()
+                            .add(new LatLng(src.latitude, src.longitude),
+                                    new LatLng(dest.latitude,dest.longitude))
+                            .width(5).color(Color.MAGENTA).geodesic(true));
+                    times++;
+                    Toast.makeText(context, (pontoList.get(pontoList.size()-1).toString()), Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    m_handler.removeCallbacks(m_handlerTask);
+                }
+                m_handler.postDelayed(m_handlerTask, 5000);
+            }
+        };
+        m_handlerTask.run();
     }
 
-    public void onConnected(){
-
-    }
     Timer timer = new Timer();
 
 
@@ -90,9 +104,13 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                 if (gpsTrackerHelper.canGetLocation()) {
                     double latitude = gpsTrackerHelper.getLatitude();
                     double longitude = gpsTrackerHelper.getLongitude();
-                    Toast.makeText(context, latitude + " " + longitude, Toast.LENGTH_SHORT).show();
+                    Location l = gpsTrackerHelper.getMyLocation();
+                    //Toast.makeText(context, latitude + " " + longitude, Toast.LENGTH_SHORT).show();
+                    Log.d("PASSANDO LOCALIZAÇÃO", latitude + " " + longitude);
+                    pontoList.add(new LatLng(l.getLatitude(), l.getLongitude()));
                 } else {
-                    Toast.makeText(context, "DEU RUIM NO ELSE", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(context, "DEU RUIM NO ELSE", Toast.LENGTH_SHORT).show();
+                    Log.d("PASSANDO LOCALIZAÇÃO", "DEU RUIM NO ELSE");
                     gpsTrackerHelper.showSettingsAlert();
                 }
             } catch (Exception e) {
@@ -214,6 +232,11 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         return null;
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
 //    private Double getCurrentSpeed(long now, long maxAge) {
 //        if (oldLocation == null)
 //            return null;
@@ -227,26 +250,5 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
 //            speed = oldLocation.distanceTo(location) * 1000 / (oldLocation.getTime() - location.getTime());
 //        }
 //        return speed;
-//    }
-
-//    protected void startLocationUpdates() {
-//        client = new GoogleApiClient.Builder(this)
-//                .addApi(LocationServices.API)
-//                .addConnectionCallbacks(this)
-//                .build();
-//        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-//            ||(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED))
-//            LocationServices.FusedLocationApi.requestLocationUpdates(
-//                client, locationRequest, this);
-//    }
-
-//    @Override
-//    public void onConnected(@Nullable Bundle bundle) {
-//
-//    }
-//
-//    @Override
-//    public void onConnectionSuspended(int i) {
-//
 //    }
 }

@@ -20,6 +20,17 @@ public class Jogador {
 
     }
 
+    public Jogador(String nome, String apelido, String _email, String _senha, String genero){
+        this.email = _email;
+        this.senha = _senha;
+        this.nome = nome;
+        this.apelido = apelido;
+        this.genero = genero.charAt(0);
+        dataCadastro = new Date();
+        horasJogadas = 0;
+        kmCaminhados = 0;
+    }
+
     public Jogador(String _email, String _senha){
         email = _email;
         senha = _senha;

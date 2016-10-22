@@ -25,6 +25,7 @@ import static android.support.v4.app.ActivityCompat.requestPermissions;
 public final class GpsTrackerHelper implements LocationListener {
 
     private final Context mContext;
+    private Location myLocation;
 
     private static final String[] LOCATION_PERMS={
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -60,6 +61,10 @@ public final class GpsTrackerHelper implements LocationListener {
     public GpsTrackerHelper(Context context) {
         this.mContext = context;
         getLocation();
+    }
+
+    public Location getMyLocation(){
+        return myLocation;
     }
 
     /**
@@ -229,6 +234,10 @@ public final class GpsTrackerHelper implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        myLocation = location;
+        Log.d("GPSTRACKER LOCALIZACAO", latitude + " " + longitude);
     }
 
     @Override
