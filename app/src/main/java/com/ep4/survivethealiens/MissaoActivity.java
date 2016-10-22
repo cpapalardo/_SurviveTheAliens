@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -37,6 +39,8 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by aluno on 07/10/2016.
@@ -48,6 +52,9 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
     Location oldLocation, location;
     String mLastUpdateTime;
     GoogleApiClient client;
+    GpsTrackerHelper gpsTrackerHelper;
+    private static final Handler handler = new Handler();
+    Context context;
 
     LocationManager locationManager;
     LocationRequest locationRequest;
@@ -63,39 +70,65 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
 //        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.fragment_map);
 //        mapFragment.getMapAsync(this);
-
-        //locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        locationRequest = LocationRequest.create();
-//        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//        locationRequest.setInterval(POLLING_FREQ);
-//        locationRequest.setFastestInterval(FASTEST_UPDATE_FREQ);
-//        client = new GoogleApiClient.Builder(this)
-//                .addApi(LocationServices.API)
-//                .addConnectionCallbacks(this)
-//                .build();
-
-//        startLocationUpdates();
-        LatLng latLng;
-        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,0,this);
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, new LocationListener() {
-//            @Override
-//            public void onLocationChanged(Location location) {
-//                Log.i("Message: ","Location changed, " + location.getAccuracy() + " , " + location.getLatitude()+ "," + location.getLongitude());
-//                Toast.makeText(this, "mudou", Toast.LENGTH_SHORT).show();
-//                draw(location);
-//            }
-//            @Override
-//            public void onProviderDisabled(String provider) {
-//                // TODO Auto-generated method stub
-//            }
-//
-//
-//        });
+        context = this;
+        gpsTrackerHelper = new GpsTrackerHelper(this);
+        //handler.postDelayed(textRunnable, 10000);
+        //textRunnable.run();
+        timer.schedule(timerTask, 2000, 5000);
     }
 
     public void onConnected(){
 
     }
+    Timer timer = new Timer();
+
+
+    TimerTask timerTask = new TimerTask() {
+        @Override
+        public void run() {
+            try {
+                if (gpsTrackerHelper.canGetLocation()) {
+                    double latitude = gpsTrackerHelper.getLatitude();
+                    double longitude = gpsTrackerHelper.getLongitude();
+                    Toast.makeText(context, latitude + " " + longitude, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "DEU RUIM NO ELSE", Toast.LENGTH_SHORT).show();
+                    gpsTrackerHelper.showSettingsAlert();
+                }
+            } catch (Exception e) {
+                System.err.println("DEU RUIM NO GPS");
+                e.printStackTrace();
+            } finally {
+                //Thread.sleep(10000);
+                //SystemClock.sleep(10000);
+            }
+        }
+    };
+
+
+    private final Runnable textRunnable = new Runnable() {
+        @Override
+        public void run() {
+            while(true) {
+                try {
+                    if (gpsTrackerHelper.canGetLocation()) {
+                        double latitude = gpsTrackerHelper.getLatitude();
+                        double longitude = gpsTrackerHelper.getLongitude();
+                        Toast.makeText(context, latitude + " " + longitude, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "DEU RUIM NO ELSE", Toast.LENGTH_SHORT).show();
+                        gpsTrackerHelper.showSettingsAlert();
+                    }
+                } catch (Exception e) {
+                    System.err.println("DEU RUIM NO GPS");
+                    e.printStackTrace();
+                } finally {
+                    //Thread.sleep(10000);
+                    //SystemClock.sleep(10000);
+                }
+            }
+        }
+    };
 
     @Override
     public void onMapReady(GoogleMap map) {
@@ -157,26 +190,6 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
     }
-
-//    @Override
-//    public void onLocationChanged(Location location) {
-//        Log.i("Message: ","Location changed, " + location.getAccuracy() + " , " + location.getLatitude()+ "," + location.getLongitude());
-//        Toast.makeText(this, "mudou", Toast.LENGTH_SHORT);
-//        draw(location);
-//    }
-
-//    public void draw(Location location){
-//        //k is the list of LatLng
-//        Polyline draw = mapa.addPolyline(new PolylineOptions()
-//                .add(new LatLng(oldLocation.getLatitude(), oldLocation.getLongitude()))
-//                .add(new LatLng(location.getLatitude(), location.getLongitude()))
-//                .width(5)
-//                .color(Color.BLUE));
-//    }
-
-//    public void onStatusChanged(String provider, int status, Bundle extras) {}
-//    public void onProviderEnabled(String provider) {}
-//    public void onProviderDisabled(String provider) {}
 
     private Location getLastKnownLocation() {
         if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) || (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {

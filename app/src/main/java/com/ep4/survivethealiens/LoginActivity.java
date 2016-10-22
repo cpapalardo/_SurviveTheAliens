@@ -65,9 +65,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void iniciarTelaCadastro(View v){
-        //Intent intent = new Intent(this, CadastroActivity.class);
-        //startActivity(intent);
-        Toast.makeText(this, "Ainda não tem nada aqui", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, CadastroActivity.class);
+        startActivity(intent);
+        //Toast.makeText(this, "Ainda não tem nada aqui", Toast.LENGTH_SHORT).show();
     }
 
     public void iniciarTelaPrincipal(){
