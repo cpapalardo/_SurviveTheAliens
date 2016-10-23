@@ -5,27 +5,27 @@ package com.ep4.survivethealiens.Model;
  */
 
 public class Ponto {
-    private double latitude;
-    private double longitude;
+    private double Latitude;
+    private double Longitude;
 
     public Ponto(double latitude, double longitude){
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.Latitude = latitude;
+        this.Longitude = longitude;
     }
 
     public void setLatitude(double latitude){
-        this.latitude = latitude;
+        this.Latitude = latitude;
     }
 
     public double getLatitude(){
-        return latitude;
+        return Latitude;
     }
 
     public void setLongitude(double longitude){
-        this.longitude = longitude;
+        this.Longitude = longitude;
     }
 
     public double getLongitude(){
-        return longitude;
+        return Longitude;
     }
 }
