@@ -20,9 +20,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name="android.support.multidex.MultiDexApplication">
         <activity
-            android:name=".LoginActivity"
+            android:name=".Activity.LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,11 +31,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CapituloActivity" />
-        <activity android:name=".HistoriaActivity" />
-        <activity android:name=".PrincipalActivity" />
-        <activity android:name=".MissaoActivity" />
-        <activity android:name=".RecuperarSenhaActivity" />
+        <activity android:name=".Activity.CapituloActivity" />
+        <activity android:name=".Activity.HistoriaActivity" />
+        <activity android:name=".Activity.PrincipalActivity" />
+        <activity android:name=".Activity.MissaoActivity" />
+        <activity android:name=".Activity.RecuperarSenhaActivity" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -49,7 +50,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".Activity.MapsActivity"
             android:label="@string/title_activity_maps" />
     </application>
 

@@ -5,4 +5,4 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ep4.survivethealiens.MapsActivity" />
+    tools:context="com.ep4.survivethealiens.Activity.MapsActivity" />

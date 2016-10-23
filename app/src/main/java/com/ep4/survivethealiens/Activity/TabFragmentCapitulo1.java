@@ -1,10 +1,13 @@
-package com.ep4.survivethealiens;
+package com.ep4.survivethealiens.Activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.ep4.survivethealiens.R;
+
 /**
  * Created by aluno on 07/10/2016.
  */

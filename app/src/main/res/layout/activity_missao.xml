@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/fragment_map"
-        tools:context=".MapsActivity"
+        tools:context=".Activity.MapsActivity"
         android:layout_weight="50"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         class="com.google.android.gms.maps.MapFragment"/>
@@ -76,6 +76,12 @@
             android:layout_toLeftOf="@id/textViewDistancia"
             android:layout_margin="15dp"
             android:text="0"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/infotext"
+            />
 
 
     </RelativeLayout>

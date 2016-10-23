@@ -1,4 +1,4 @@
-package com.ep4.survivethealiens;
+package com.ep4.survivethealiens.Activity;
 
 import android.Manifest;
 import android.content.Context;
@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.ep4.survivethealiens.Helper.GpsTrackerHelper;
+import com.ep4.survivethealiens.R;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;

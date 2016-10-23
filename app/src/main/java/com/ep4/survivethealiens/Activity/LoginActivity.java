@@ -1,4 +1,4 @@
-package com.ep4.survivethealiens;
+package com.ep4.survivethealiens.Activity;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -9,6 +9,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.ep4.survivethealiens.Feign.Task.JogadorTask;
+import com.ep4.survivethealiens.Model.Jogador;
+import com.ep4.survivethealiens.R;
+
 import org.greenrobot.eventbus.EventBus;
 
 /**
@@ -19,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText editTextSenha;
     TextView textViewAppName;
     Jogador jogador;
+    JogadorTask jogadorTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         //Colocando fonte no nome do app
         Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/alien_and_cows_trial.ttf");
         textViewAppName.setTypeface(customFont);
-
+        jogadorTask = new JogadorTask();
     }
 
     public void esqueceuSuaSenha(View v) {
@@ -56,6 +62,15 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         Jogador _jogador = new Jogador(email, senha);
+
+        jogador = jogadorTask.doInBackground(1);
+        if (jogador == null) {
+            Toast.makeText(this, "Não funcionou", Toast.LENGTH_SHORT).show();
+            //return;
+        }
+        else{
+            Toast.makeText(this, "Bem vindo, " + jogador.getNome(), Toast.LENGTH_SHORT).show();
+        }
         iniciarTelaLogin(v);
     }
 

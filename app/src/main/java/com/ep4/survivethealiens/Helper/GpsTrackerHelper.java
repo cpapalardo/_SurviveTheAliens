@@ -1,4 +1,4 @@
-package com.ep4.survivethealiens;
+package com.ep4.survivethealiens.Helper;
 
 /**
  * Created by Projeto on 21/10/2016.

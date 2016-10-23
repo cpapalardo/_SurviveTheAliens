@@ -3,6 +3,11 @@ package com.ep4.survivethealiens;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.ep4.survivethealiens.Activity.TabFragmentCapitulo1;
+import com.ep4.survivethealiens.Activity.TabFragmentCapitulo2;
+import com.ep4.survivethealiens.Activity.TabFragmentCapitulo3;
+
 /**
  * Created by aluno on 07/10/2016.
  */

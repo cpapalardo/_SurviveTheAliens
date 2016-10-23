@@ -1,10 +1,14 @@
-package com.ep4.survivethealiens;
+package com.ep4.survivethealiens.Activity;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+
+import com.ep4.survivethealiens.PagerAdapter;
+import com.ep4.survivethealiens.R;
+
 /**
  * Created by aluno on 07/10/2016.
  */

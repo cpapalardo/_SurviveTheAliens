@@ -4,7 +4,7 @@
     xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ep4.survivethealiens.PrincipalActivity">
+    tools:context="com.ep4.survivethealiens.Activity.PrincipalActivity">
 
     <ImageView
         android:layout_width="fill_parent"

@@ -1,4 +1,4 @@
-package com.ep4.survivethealiens;
+package com.ep4.survivethealiens.Model;
 
 /**
  * Created by Carla on 20/10/2016.
