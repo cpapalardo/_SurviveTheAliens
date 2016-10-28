@@ -1,18 +1,36 @@
 package com.ep4.survivethealiens.Model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 /**
  * Created by aluno on 07/10/2016.
  */
 public class Jogador {
+
+    @SerializedName("Id")
     private Integer Id;
+
+    @SerializedName("Nome")
     private String Nome;
+
+    @SerializedName("Apelido")
     private String Apelido;
+
+    @SerializedName("Genero")
     private String Genero;
+
+    @SerializedName("Email")
     private String Email;
+
+    @SerializedName("Senha")
     private String Senha;
+
+    @SerializedName("HorasJogadas")
     private Integer HorasJogadas;
+
+    @SerializedName("KmCaminhados")
     private Integer KmCaminhados;
 
     public Jogador(){

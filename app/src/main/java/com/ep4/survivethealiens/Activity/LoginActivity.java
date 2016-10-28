@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ep4.survivethealiens.Feign.Task.JogadorTask;
+import com.ep4.survivethealiens.Feign.Task.GetJogadorTask;
 import com.ep4.survivethealiens.Model.Jogador;
 import com.ep4.survivethealiens.R;
 
@@ -24,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText editTextSenha;
     TextView textViewAppName;
     Jogador jogador;
-    JogadorTask jogadorTask;
+    GetJogadorTask getJogadorTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         //Colocando fonte no nome do app
         Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/alien_and_cows_trial.ttf");
         textViewAppName.setTypeface(customFont);
-        jogadorTask = new JogadorTask();
+        getJogadorTask = new GetJogadorTask();
     }
 
     public void esqueceuSuaSenha(View v) {
@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Jogador _jogador = new Jogador(email, senha);
 
-        jogador = jogadorTask.doInBackground(1);
+        jogador = getJogadorTask.doInBackground(1);
         if (jogador == null) {
             Toast.makeText(this, "Não funcionou", Toast.LENGTH_SHORT).show();
             //return;

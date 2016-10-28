@@ -9,7 +9,7 @@ import feign.RequestLine;
  * Created by Carla on 23/10/2016.
  */
 
-public interface JogadorRequest {
+public interface JogadorRequests {
     //só coloca as assinaturas de método na interface
 
     //mapeando
@@ -17,4 +17,7 @@ public interface JogadorRequest {
     //NESTE CASO é GET. Isso depende de para onde será enviada a requisição. Se for POST, trocar por POST, etc
     @RequestLine("GET Jogadors/{id}/")
     Jogador getPostagem(@Param("id") Integer id);
+
+    @RequestLine("POST Jogador")
+    Jogador criarJogador(Jogador jogador);
 }
