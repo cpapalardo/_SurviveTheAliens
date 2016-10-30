@@ -45,6 +45,7 @@ public class Jogador {
         this.Genero = genero;
         HorasJogadas = 0;
         KmCaminhados = 0;
+        Id = 0;
     }
 
     public Jogador(String _email, String _senha){

@@ -35,6 +35,7 @@
         <activity android:name=".Activity.HistoriaActivity" />
         <activity android:name=".Activity.PrincipalActivity" />
         <activity android:name=".Activity.MissaoActivity" />
+        <activity android:name=".Activity.CadastroActivity" />
         <activity android:name=".Activity.RecuperarSenhaActivity" />
 
         <!--
