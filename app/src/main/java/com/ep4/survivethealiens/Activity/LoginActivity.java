@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ep4.survivethealiens.Feign.Task.AutenticarJogadorTask;
 import com.ep4.survivethealiens.Feign.Task.GetJogadorTask;
 import com.ep4.survivethealiens.Model.Jogador;
 import com.ep4.survivethealiens.R;
@@ -23,8 +24,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText editTextEmail;
     EditText editTextSenha;
     TextView textViewAppName;
-    Jogador jogador;
-    GetJogadorTask getJogadorTask;
+    public Jogador jogador;
+    AutenticarJogadorTask autenticarJogadorTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         //Colocando fonte no nome do app
         Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/alien_and_cows_trial.ttf");
         textViewAppName.setTypeface(customFont);
-        getJogadorTask = new GetJogadorTask();
+        autenticarJogadorTask = new AutenticarJogadorTask(this, this);
     }
 
     public void esqueceuSuaSenha(View v) {
@@ -63,15 +64,21 @@ public class LoginActivity extends AppCompatActivity {
 
         Jogador _jogador = new Jogador(email, senha);
 
-        jogador = getJogadorTask.doInBackground(1);
-        if (jogador == null) {
-            Toast.makeText(this, "Não funcionou", Toast.LENGTH_SHORT).show();
-            //return;
+        //jogador = getJogadorTask.doInBackground(1);
+
+        try{
+            autenticarJogadorTask.execute(email, senha);
+        }catch (Exception e){
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
-        else{
-            Toast.makeText(this, "Bem vindo, " + jogador.getNome(), Toast.LENGTH_SHORT).show();
-        }
-        iniciarTelaLogin(v);
+//        if (jogador == null) {
+//            Toast.makeText(this, "Não funcionou", Toast.LENGTH_SHORT).show();
+//            //return;
+//        }
+//        else{
+//            Toast.makeText(this, "Bem vindo, " + jogador.getNome(), Toast.LENGTH_SHORT).show();
+//        }
+//        iniciarTelaLogin(v);
     }
 
     public void iniciarTelaLogin(View v) {

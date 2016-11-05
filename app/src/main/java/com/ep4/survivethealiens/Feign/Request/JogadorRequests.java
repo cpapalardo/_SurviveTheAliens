@@ -22,4 +22,7 @@ public interface JogadorRequests {
     @RequestLine("POST Jogadors/")
     @Headers("Content-Type: application/json")
     Jogador criarJogador(Jogador jogador);
+
+    @RequestLine("GET Jogadors/{email}/{senha}")
+    Jogador autenticarJogador(@Param("email") String email, @Param("senha") String senha);
 }
