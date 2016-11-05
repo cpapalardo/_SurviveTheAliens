@@ -1,9 +1,17 @@
 package com.ep4.survivethealiens.Feign.Task;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
+import com.ep4.survivethealiens.Activity.CadastroActivity;
+import com.ep4.survivethealiens.Activity.PrincipalActivity;
 import com.ep4.survivethealiens.Feign.Request.JogadorRequests;
 import com.ep4.survivethealiens.Model.Jogador;
+
+import org.greenrobot.eventbus.EventBus;
 
 import feign.Feign;
 import feign.Logger;
@@ -15,7 +23,16 @@ import feign.gson.GsonEncoder;
  */
 
 public class PostJogadorTask extends AsyncTask<Jogador, Void, Jogador> {
+    ProgressDialog pDialog;
+    CadastroActivity myActivity;
+    boolean userVerified;
+    private Context myContext;
+    Jogador jogador;
 
+    public PostJogadorTask(CadastroActivity activity, Context context){
+        myActivity = activity;
+        myContext = context;
+    }
     @Override
     public Jogador doInBackground(Jogador... params) {
         try{
@@ -25,12 +42,43 @@ public class PostJogadorTask extends AsyncTask<Jogador, Void, Jogador> {
                     .logLevel(Logger.Level.FULL)
                     .target(JogadorRequests.class, "http://survivethealiens.azurewebsites.net/api/");// lá em PostagemRequest, as URIS
             //serão pegas a partir desta URL
-            Jogador jogador = request.criarJogador(params[0]);
-            return jogador;
+            jogador = request.criarJogador(params[0]);
+            if(jogador != null)
+                userVerified = true;
         }catch (Exception e){
+            userVerified = false;
             System.err.println("Erro de comunicação,");
             e.printStackTrace();
-            return null;
         }
+        return jogador;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        try {
+            pDialog = new ProgressDialog(myContext);
+            pDialog.setMessage("Autenticando usuário...");
+            pDialog.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onPostExecute(Jogador jogador) {
+        try {
+            if(userVerified){
+                myActivity.jogador = this.jogador;
+                Intent intent = new Intent(myActivity, PrincipalActivity.class);
+                EventBus.getDefault().postSticky(jogador);
+                myActivity.startActivity(intent);
+            }else{
+                //ou e-mail em uso
+                Toast.makeText(myContext, "Houve um problema ao efetuar o cadastro. Tente novamente mais tarde.", Toast.LENGTH_LONG);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        pDialog.dismiss();
     }
 }

@@ -1,6 +1,8 @@
 package com.ep4.survivethealiens.Feign.Request;
 
 import com.ep4.survivethealiens.Model.Jogador;
+
+import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 
@@ -14,9 +16,10 @@ public interface JogadorRequests {
     //mapeando
     //Id do RequestLine é o mesmo do @Param, e é usado como parâmetro do getPostagem
     //NESTE CASO é GET. Isso depende de para onde será enviada a requisição. Se for POST, trocar por POST, etc
-    @RequestLine("GET Jogador/{id}/")
+    @RequestLine("GET Jogadors/{id}/")
     Jogador getPostagem(@Param("id") Integer id);
 
-    @RequestLine("POST Jogador/")
+    @RequestLine("POST Jogadors/")
+    @Headers("Content-Type: application/json")
     Jogador criarJogador(Jogador jogador);
 }
