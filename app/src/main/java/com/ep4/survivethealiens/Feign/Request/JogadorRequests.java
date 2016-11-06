@@ -25,4 +25,7 @@ public interface JogadorRequests {
 
     @RequestLine("GET Jogadors/{email}/{senha}")
     Jogador autenticarJogador(@Param("email") String email, @Param("senha") String senha);
+
+    @RequestLine("PUT Jogadors/{id}/")
+    Jogador atualizarJogador(@Param("id") Integer id, Jogador jogador);
 }

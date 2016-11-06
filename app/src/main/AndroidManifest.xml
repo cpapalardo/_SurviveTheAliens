@@ -17,11 +17,11 @@
         android:protectionLevel="signature" />
 
     <application
+        android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name="android.support.multidex.MultiDexApplication">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".Activity.LoginActivity"
             android:label="@string/app_name">
@@ -53,6 +53,7 @@
         <activity
             android:name=".Activity.MapsActivity"
             android:label="@string/title_activity_maps" />
+        <activity android:name=".Activity.PerfilActivity"></activity>
     </application>
 
 </manifest>
