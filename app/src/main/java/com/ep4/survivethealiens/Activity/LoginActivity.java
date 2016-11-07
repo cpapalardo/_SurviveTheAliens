@@ -42,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
         //Colocando fonte no nome do app
         Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/alien_and_cows_trial.ttf");
         textViewAppName.setTypeface(customFont);
-        autenticarJogadorTask = new AutenticarJogadorTask(this, this);
     }
 
     public void esqueceuSuaSenha(View v) {
@@ -67,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         //jogador = getJogadorTask.doInBackground(1);
 
         try{
+            autenticarJogadorTask = new AutenticarJogadorTask(this, this);
             autenticarJogadorTask.execute(email, senha);
         }catch (Exception e){
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();

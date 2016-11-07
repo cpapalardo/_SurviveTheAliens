@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.ep4.survivethealiens.Activity.CadastroActivity;
+import com.ep4.survivethealiens.Activity.PerfilActivity;
 import com.ep4.survivethealiens.Activity.PrincipalActivity;
 import com.ep4.survivethealiens.Feign.Request.JogadorRequests;
 import com.ep4.survivethealiens.Model.Jogador;
@@ -24,12 +25,12 @@ import feign.gson.GsonEncoder;
 
 public class PutJogadorTask extends AsyncTask<Jogador, Void, Jogador> {
     ProgressDialog pDialog;
-    CadastroActivity myActivity;
+    PerfilActivity myActivity;
     boolean userVerified;
     private Context myContext;
     Jogador jogador;
 
-    public PutJogadorTask(CadastroActivity activity, Context context){
+    public PutJogadorTask(PerfilActivity activity, Context context){
         myActivity = activity;
         myContext = context;
     }
@@ -66,19 +67,16 @@ public class PutJogadorTask extends AsyncTask<Jogador, Void, Jogador> {
 
     @Override
     protected void onPostExecute(Jogador jogador) {
+        pDialog.dismiss();
         try {
-            if(!userVerified){
+            if(userVerified){
                 myActivity.jogador = this.jogador;
-                Intent intent = new Intent(myActivity, PrincipalActivity.class);
-                EventBus.getDefault().postSticky(jogador);
-                myActivity.startActivity(intent);
+                Toast.makeText(myContext, "Os dados foram atualizados com sucesso.", Toast.LENGTH_LONG).show();
             }else{
-                //ou e-mail em uso
-                Toast.makeText(myContext, "Houve um problema ao atualizar o cadastro. Tente novamente mais tarde.", Toast.LENGTH_LONG);
+                Toast.makeText(myContext, "Houve um problema ao atualizar o cadastro. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
             }
         }catch (Exception e){
             e.printStackTrace();
         }
-        pDialog.dismiss();
     }
 }

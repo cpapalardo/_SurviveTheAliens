@@ -5,6 +5,7 @@ import com.ep4.survivethealiens.Model.Jogador;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
+import feign.codec.StringDecoder;
 
 /**
  * Created by Carla on 23/10/2016.
@@ -23,9 +24,10 @@ public interface JogadorRequests {
     @Headers("Content-Type: application/json")
     Jogador criarJogador(Jogador jogador);
 
-    @RequestLine("GET Jogadors/{email}/{senha}")
-    Jogador autenticarJogador(@Param("email") String email, @Param("senha") String senha);
+    @RequestLine("GET Jogadors/{Email}/{Senha}")
+    Jogador autenticarJogador(@Param("Email") String email, @Param("Senha") String senha);
 
     @RequestLine("PUT Jogadors/{id}/")
+    @Headers("Content-Type: application/json")
     Jogador atualizarJogador(@Param("id") Integer id, Jogador jogador);
 }

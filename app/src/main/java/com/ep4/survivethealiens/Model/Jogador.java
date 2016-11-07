@@ -53,9 +53,7 @@ public class Jogador {
         Senha = _senha;
     }
 
-    public int getId() {
-        return Id;
-    }
+    public int getId() { return Id; }
 
     public void setId(int id) {
         this.Id = id;
