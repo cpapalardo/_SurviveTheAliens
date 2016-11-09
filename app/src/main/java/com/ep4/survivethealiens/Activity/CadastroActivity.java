@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  * Created by Carla on 08/10/2016.
  */
 
-public class CadastroActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class CadastroActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     TextView textNome;
     TextView textApelido;
@@ -103,7 +103,7 @@ public class CadastroActivity extends AppCompatActivity implements AdapterView.O
     }
 
     public boolean validate(String emailStr) {
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
         return matcher.find();
     }
 
