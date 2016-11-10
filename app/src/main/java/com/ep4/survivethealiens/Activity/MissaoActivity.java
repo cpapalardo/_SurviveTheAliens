@@ -12,6 +12,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Chronometer;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ep4.survivethealiens.Helper.GpsTrackerHelper;
@@ -28,6 +31,8 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -43,21 +48,29 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
     GoogleMap mapa;
     Location location;
     GpsTrackerHelper gpsTrackerHelper;
-    private static final Handler handler = new Handler();
-    ArrayList<LatLng> pontoList = new ArrayList<LatLng>();
+    TextView infotext;
     Context context;
     Handler m_handler;
     Runnable m_handlerTask;
+    Chronometer chronometerTempoJogo;
+
+    ArrayList<LatLng> pontoList = new ArrayList<LatLng>();
     int times=0;
+    long tempoPassado = 0;
+    float distanciaEmMetros = 0;
+    boolean pausarMissao = false;
 
     LocationManager locationManager;
-    LocationRequest locationRequest;
     private static final long POLLING_FREQ = 1000 * 30;
     private static final long FASTEST_UPDATE_FREQ = 1000 * 5;
+    private static final Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_missao);
+
+        infotext = (TextView) findViewById(R.id.infotext);
+        chronometerTempoJogo = (Chronometer) findViewById(R.id.chronometerTempoJogo);
 
         mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.fragment_map);
@@ -69,6 +82,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         //handler.postDelayed(textRunnable, 10000);
         //textRunnable.run();
         timer.schedule(timerTask, 2000, 5000);
+        chronometerTempoJogo.start();
 
         m_handler = new Handler();
         m_handlerTask = new Runnable()
@@ -103,22 +117,40 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         @Override
         public void run() {
             try {
-                if (gpsTrackerHelper.canGetLocation()) {
-                    double latitude = gpsTrackerHelper.getLatitude();
-                    double longitude = gpsTrackerHelper.getLongitude();
-                    Location l = gpsTrackerHelper.getMyLocation();
-                    //Toast.makeText(context, latitude + " " + longitude, Toast.LENGTH_SHORT).show();
-                    Log.d("PASSANDO LOCALIZAÇÃO", latitude + " " + longitude);
-                    pontoList.add(new LatLng(l.getLatitude(), l.getLongitude()));
-                } else {
-                   // Toast.makeText(context, "DEU RUIM NO ELSE", Toast.LENGTH_SHORT).show();
-                    Log.d("PASSANDO LOCALIZAÇÃO", "DEU RUIM NO ELSE");
-                    gpsTrackerHelper.showSettingsAlert();
+                if(!pausarMissao) {
+                    if (gpsTrackerHelper.canGetLocation()) {
+                        double latitude = gpsTrackerHelper.getLatitude();
+                        double longitude = gpsTrackerHelper.getLongitude();
+                        Location l = gpsTrackerHelper.getMyLocation();
+                        //Toast.makeText(context, latitude + " " + longitude, Toast.LENGTH_SHORT).show();
+                        Log.d("PASSANDO LOCALIZAÇÃO", latitude + " " + longitude);
+                        pontoList.add(new LatLng(l.getLatitude(), l.getLongitude()));
+                    } else {
+                        // Toast.makeText(context, "DEU RUIM NO ELSE", Toast.LENGTH_SHORT).show();
+                        Log.d("PASSANDO LOCALIZAÇÃO", "DEU RUIM NO ELSE");
+                        gpsTrackerHelper.showSettingsAlert();
+                    }
                 }
             } catch (Exception e) {
                 System.err.println("DEU RUIM NO GPS");
                 e.printStackTrace();
             } finally {
+//                tempoPassado++;
+//                infotext.setText(String.format("%02d:%02d:%02d", tempoPassado / 3600,
+//                        (tempoPassado % 3600) / 60, (tempoPassado % 60)));
+
+                for(int i = 0; i < pontoList.size()-1; i++){
+                    Location location = new Location("");
+                    location.setLatitude(pontoList.get(i).latitude);
+                    location.setLongitude(pontoList.get(i).longitude);
+
+                    Location location2 = new Location("");
+                    location2.setLatitude(pontoList.get(i+1).latitude);
+                    location2.setLongitude(pontoList.get(i+1).longitude);
+
+                    distanciaEmMetros += location.distanceTo(location2);
+
+                }
                 //Thread.sleep(10000);
                 //SystemClock.sleep(10000);
             }
@@ -131,13 +163,15 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         public void run() {
             while(true) {
                 try {
-                    if (gpsTrackerHelper.canGetLocation()) {
-                        double latitude = gpsTrackerHelper.getLatitude();
-                        double longitude = gpsTrackerHelper.getLongitude();
-                        Toast.makeText(context, latitude + " " + longitude, Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context, "DEU RUIM NO ELSE", Toast.LENGTH_SHORT).show();
-                        gpsTrackerHelper.showSettingsAlert();
+                    if(!pausarMissao) {
+                        if (gpsTrackerHelper.canGetLocation()) {
+                            double latitude = gpsTrackerHelper.getLatitude();
+                            double longitude = gpsTrackerHelper.getLongitude();
+                            Toast.makeText(context, latitude + " " + longitude, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "DEU RUIM NO ELSE", Toast.LENGTH_SHORT).show();
+                            gpsTrackerHelper.showSettingsAlert();
+                        }
                     }
                 } catch (Exception e) {
                     System.err.println("DEU RUIM NO GPS");
@@ -237,6 +271,21 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public void onLocationChanged(Location location) {
 
+    }
+
+    public void pausarContinuar(View view){
+        switch (view.getTag().toString()){
+            case "Continuar":
+                chronometerTempoJogo.setBase(tempoPassado);
+                chronometerTempoJogo.start();
+                pausarMissao = true;
+                break;
+            case "Pausar":
+                tempoPassado = chronometerTempoJogo.getBase();
+                chronometerTempoJogo.stop();
+                pausarMissao = false;
+                break;
+        }
     }
 
 //    private Double getCurrentSpeed(long now, long maxAge) {

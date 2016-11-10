@@ -27,7 +27,82 @@
         android:layout_weight="50"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         class="com.google.android.gms.maps.MapFragment"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="50"
+        android:orientation="vertical"
+        >
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/infotext"
+                android:text="tempo"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewDistancia"
+                android:gravity="center_horizontal"
+                android:text="distância"
+                android:layout_weight="1"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewTempoValor"
+            android:text="0"
+                android:layout_weight="1"
+                android:gravity="center"/>
+
+            <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/textViewDistanciaValor"-->
+            <!--android:layout_toLeftOf="@id/textViewDistancia"-->
+            <!--android:layout_margin="15dp"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_weight="1"-->
+            <!--android:text="0"/>-->
+            <Chronometer
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/chronometerTempoJogo"
+                android:layout_weight="1"
+                android:gravity="center"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pause/Resume"
+                android:id="@+id/buttonPauseResume"
+                android:onClick="pausarContinuar"/>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
    <!-- <Button
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,56 +110,58 @@
         android:background="@color/alienColor1"
         />-->
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="50">
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_weight="50">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/infotext"
-            />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/infotext"-->
+            <!--/>-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textViewTempoValor"
-            android:text="0 "
-            android:layout_margin="15dp"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/textViewTempoValor"-->
+            <!--android:text="0 "-->
+            <!--android:layout_margin="15dp"/>-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textViewTempo"
-            android:text="minutos"
-            android:layout_toRightOf="@id/textViewTempoValor"
-            android:layout_margin="15dp"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/textViewTempo"-->
+            <!--android:text="tempo"-->
+            <!--android:layout_toRightOf="@id/textViewTempoValor"-->
+            <!--android:layout_margin="15dp"/>-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textViewDistancia"
-            android:layout_alignParentRight="true"
-            android:text="km"
-            android:layout_margin="15dp"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/textViewDistancia"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:text="km"-->
+            <!--android:layout_margin="15dp"/>-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textViewDistanciaValor"
-            android:layout_toLeftOf="@id/textViewDistancia"
-            android:layout_margin="15dp"
-            android:text="0"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/textViewDistanciaValor"-->
+            <!--android:layout_toLeftOf="@id/textViewDistancia"-->
+            <!--android:layout_margin="15dp"-->
+            <!--android:text="0"/>-->
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/infotext"
-            />
+        <!--<ImageButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/textViewTempo"-->
+            <!--android:layout_centerHorizontal="true"-->
+
+            <!--/>-->
 
 
-    </RelativeLayout>
+    <!--</RelativeLayout>-->
 
 
 
