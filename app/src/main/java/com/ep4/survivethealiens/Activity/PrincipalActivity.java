@@ -12,10 +12,13 @@ import org.greenrobot.eventbus.EventBus;
 
 public class PrincipalActivity extends AppCompatActivity {
 
+    Jogador jogador;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
+        jogador = EventBus.getDefault().getStickyEvent(Jogador.class);
     }
 
     public void abrirHistoria(View view) {

@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.ep4.survivethealiens.Activity.LoginActivity;
 import com.ep4.survivethealiens.Activity.PrincipalActivity;
 import com.ep4.survivethealiens.Feign.Request.JogadorRequests;
+import com.ep4.survivethealiens.Model.Credenciais;
 import com.ep4.survivethealiens.Model.Jogador;
 
 import org.greenrobot.eventbus.EventBus;
@@ -22,7 +23,7 @@ import feign.gson.GsonEncoder;
  * Created by Carla on 04/11/2016.
  */
 
-public class AutenticarJogadorTask extends AsyncTask<String, Void, Jogador> {
+public class AutenticarJogadorTask extends AsyncTask<Credenciais, Void, Jogador> {
 
     Jogador jogador;
     LoginActivity myActivity;
@@ -36,7 +37,7 @@ public class AutenticarJogadorTask extends AsyncTask<String, Void, Jogador> {
     }
 
     @Override
-    protected Jogador doInBackground(String... params) {
+    protected Jogador doInBackground(Credenciais... params) {
         try{
             JogadorRequests request = Feign.builder()
                     .encoder(new GsonEncoder())
@@ -44,7 +45,7 @@ public class AutenticarJogadorTask extends AsyncTask<String, Void, Jogador> {
                     .logLevel(Logger.Level.FULL)
                     .target(JogadorRequests.class, "http://survivethealiens.azurewebsites.net/api/");// lá em PostagemRequest, as URIS
             //serão pegas a partir desta URL
-            jogador = request.autenticarJogador(params[0], params[1]);
+            jogador = request.autenticarJogador(params[0]);
             if(jogador != null)
                 userVerified = true;
         }catch (Exception e){
@@ -74,6 +75,7 @@ public class AutenticarJogadorTask extends AsyncTask<String, Void, Jogador> {
                 Intent intent = new Intent(myActivity, PrincipalActivity.class);
                 EventBus.getDefault().postSticky(jogador);
                 myActivity.startActivity(intent);
+                Toast.makeText(myContext, "Olá de novo, " + jogador.getApelido(), Toast.LENGTH_SHORT).show();
             }else{
                 //ou e-mail em uso
                 Toast.makeText(myContext, "Houve um problema ao efetuar a autenticação. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();

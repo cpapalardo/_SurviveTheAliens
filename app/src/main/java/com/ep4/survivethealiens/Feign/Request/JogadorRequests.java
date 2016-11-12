@@ -1,7 +1,9 @@
 package com.ep4.survivethealiens.Feign.Request;
 
+import com.ep4.survivethealiens.Model.Credenciais;
 import com.ep4.survivethealiens.Model.Jogador;
 
+import feign.Body;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
@@ -24,8 +26,10 @@ public interface JogadorRequests {
     @Headers("Content-Type: application/json")
     Jogador criarJogador(Jogador jogador);
 
-    @RequestLine("POST Autenticar/")
-    Jogador autenticarJogador(String email, String senha);
+    @RequestLine("POST Autenticar/creds")
+    @Headers("Content-Type: application/json")
+    Jogador autenticarJogador(Credenciais creds);
+    //Jogador autenticarJogador(String email, String senha);
 
     @RequestLine("PUT Jogadors/{id}/")
     @Headers("Content-Type: application/json")

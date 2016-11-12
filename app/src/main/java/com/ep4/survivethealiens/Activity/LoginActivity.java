@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.ep4.survivethealiens.Feign.Task.AutenticarJogadorTask;
 import com.ep4.survivethealiens.Feign.Task.GetJogadorTask;
+import com.ep4.survivethealiens.Model.Credenciais;
 import com.ep4.survivethealiens.Model.Jogador;
 import com.ep4.survivethealiens.R;
 
@@ -61,13 +62,13 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        Jogador _jogador = new Jogador(email, senha);
+        Credenciais credenciais = new Credenciais(email, senha);
 
         //jogador = getJogadorTask.doInBackground(1);
 
         try{
             autenticarJogadorTask = new AutenticarJogadorTask(this, this);
-            autenticarJogadorTask.execute(email, senha);
+            autenticarJogadorTask.execute(credenciais);
         }catch (Exception e){
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
