@@ -75,12 +75,10 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.fragment_map);
         mapFragment.getMapAsync(this);
-//        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.fragment_map);
-//        mapFragment.getMapAsync(this);
+
         context = this;
         gpsTrackerHelper = new GpsTrackerHelper(this);
-        //handler.postDelayed(textRunnable, 10000);
-        //textRunnable.run();
+
         timer.schedule(timerTask, 2000, 5000);
         chronometerTempoJogo.start();
 

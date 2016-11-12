@@ -94,8 +94,6 @@ public class CadastroActivity extends AppCompatActivity implements AdapterView.O
 
         try{
             postJogadorTask.execute(jogador);
-//            EventBus.getDefault().postSticky(jogador);
-//            startActivityForResult(intent, 0);
         }catch (Exception e){
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
