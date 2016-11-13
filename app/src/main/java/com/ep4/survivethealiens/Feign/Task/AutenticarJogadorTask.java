@@ -71,6 +71,11 @@ public class AutenticarJogadorTask extends AsyncTask<Credenciais, Void, Jogador>
     protected void onPostExecute(Jogador jogador) {
         try {
             if(userVerified){
+
+                GetMissaoByJogadorTask getMissaoByJogadorTask = new GetMissaoByJogadorTask(myActivity, myContext);
+
+                getMissaoByJogadorTask.execute(jogador.getId());
+
                 myActivity.jogador = this.jogador;
                 Intent intent = new Intent(myActivity, PrincipalActivity.class);
                 EventBus.getDefault().postSticky(jogador);

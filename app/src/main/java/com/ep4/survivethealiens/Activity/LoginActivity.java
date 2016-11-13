@@ -12,11 +12,15 @@ import android.widget.Toast;
 
 import com.ep4.survivethealiens.Feign.Task.AutenticarJogadorTask;
 import com.ep4.survivethealiens.Feign.Task.GetJogadorTask;
+import com.ep4.survivethealiens.Feign.Task.GetMissaoByJogadorTask;
 import com.ep4.survivethealiens.Model.Credenciais;
 import com.ep4.survivethealiens.Model.Jogador;
+import com.ep4.survivethealiens.Model.MissaoJogador;
 import com.ep4.survivethealiens.R;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 
 /**
  * Created by aluno on 07/10/2016.
@@ -27,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView textViewAppName;
     public Jogador jogador;
     AutenticarJogadorTask autenticarJogadorTask;
+    public static ArrayList<MissaoJogador> missaoJogadorList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +41,9 @@ public class LoginActivity extends AppCompatActivity {
         editTextEmail = (EditText) findViewById(R.id.input_email);
         editTextSenha = (EditText) findViewById(R.id.input_password);
         textViewAppName = (TextView) findViewById(R.id.textViewAppName);
+
+        missaoJogadorList = new ArrayList<>();
+
         //para garantir que a internet será acessada
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -64,22 +72,13 @@ public class LoginActivity extends AppCompatActivity {
 
         Credenciais credenciais = new Credenciais(email, senha);
 
-        //jogador = getJogadorTask.doInBackground(1);
-
         try{
             autenticarJogadorTask = new AutenticarJogadorTask(this, this);
             autenticarJogadorTask.execute(credenciais);
+
         }catch (Exception e){
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
-//        if (jogador == null) {
-//            Toast.makeText(this, "Não funcionou", Toast.LENGTH_SHORT).show();
-//            //return;
-//        }
-//        else{
-//            Toast.makeText(this, "Bem vindo, " + jogador.getNome(), Toast.LENGTH_SHORT).show();
-//        }
-//        iniciarTelaLogin(v);
     }
 
     public void iniciarTelaLogin(View v) {

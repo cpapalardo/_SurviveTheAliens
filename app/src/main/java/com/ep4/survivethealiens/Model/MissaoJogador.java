@@ -6,9 +6,9 @@ package com.ep4.survivethealiens.Model;
 
 public class MissaoJogador {
     private int Id;
-    private int IdJogador;
-    private int IdMissao;
-    private boolean liberada;
+    private int Id_Jogador;
+    private int Id_Missao;
+    private boolean Liberada;
 
     public int getId() {
         return Id;
@@ -19,26 +19,26 @@ public class MissaoJogador {
     }
 
     public int getIdJogador() {
-        return IdJogador;
+        return Id_Jogador;
     }
 
     public void setIdJogador(int idJogador) {
-        IdJogador = idJogador;
+        Id_Jogador = idJogador;
     }
 
     public int getIdMissao() {
-        return IdMissao;
+        return Id_Missao;
     }
 
     public void setIdMissao(int idMissao) {
-        IdMissao = idMissao;
+        Id_Missao = idMissao;
     }
 
     public boolean isLiberada() {
-        return liberada;
+        return Liberada;
     }
 
     public void setLiberada(boolean liberada) {
-        this.liberada = liberada;
+        this.Liberada = liberada;
     }
 }

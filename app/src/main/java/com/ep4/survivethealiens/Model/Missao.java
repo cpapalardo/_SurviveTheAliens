@@ -8,13 +8,14 @@ public class Missao {
     private boolean Concluida;
     private String Nome;
     private Capitulo Capitulo;
+    private int Numero;
 
     public int getId() {
         return Id;
     }
 
     public void setId(int id) {
-        this.Id = id;
+        Id = id;
     }
 
     public boolean isConcluida() {
@@ -22,7 +23,7 @@ public class Missao {
     }
 
     public void setConcluida(boolean concluida) {
-        this.Concluida = concluida;
+        Concluida = concluida;
     }
 
     public String getNome() {
@@ -30,7 +31,7 @@ public class Missao {
     }
 
     public void setNome(String nome) {
-        this.Nome = nome;
+        Nome = nome;
     }
 
     public Capitulo getCapitulo() {
@@ -38,7 +39,15 @@ public class Missao {
     }
 
     public void setCapitulo(Capitulo capitulo) {
-        this.Capitulo = capitulo;
+        Capitulo = capitulo;
+    }
+
+    public int getNumero() {
+        return Numero;
+    }
+
+    public void setNumero(int numero) {
+        Numero = numero;
     }
 }
 
