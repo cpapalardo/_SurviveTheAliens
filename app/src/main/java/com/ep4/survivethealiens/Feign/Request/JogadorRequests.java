@@ -2,6 +2,10 @@ package com.ep4.survivethealiens.Feign.Request;
 
 import com.ep4.survivethealiens.Model.Credenciais;
 import com.ep4.survivethealiens.Model.Jogador;
+import com.ep4.survivethealiens.Model.Missao;
+import com.ep4.survivethealiens.Model.MissaoJogador;
+
+import java.util.ArrayList;
 
 import feign.Body;
 import feign.Headers;
@@ -34,4 +38,10 @@ public interface JogadorRequests {
     @RequestLine("PUT Jogadors/{id}/")
     @Headers("Content-Type: application/json")
     Jogador atualizarJogador(@Param("id") Integer id, Jogador jogador);
+
+    @RequestLine("GET MissaoJogadors/{id}/")
+    ArrayList<MissaoJogador> getMissoesById(@Param("id") Integer id);
+
+    @RequestLine("GET Missaos/")
+    ArrayList<Missao> getMissoes();
 }

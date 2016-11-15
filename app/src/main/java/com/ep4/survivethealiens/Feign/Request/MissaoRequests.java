@@ -17,6 +17,9 @@ public interface MissaoRequests {
     @RequestLine("GET MissaoJogadors/{id}/")
     ArrayList<MissaoJogador> getMissoesById(@Param("id") Integer id);
 
+    @RequestLine("GET Missaos/")
+    ArrayList<Missao> getMissoes();
+
     @RequestLine("GET MissaoJogador/porJogador")
     ArrayList<MissaoJogador> getMissaoListByJogador(Jogador jogador);
 }

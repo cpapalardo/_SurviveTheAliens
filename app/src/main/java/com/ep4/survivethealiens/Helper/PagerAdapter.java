@@ -1,4 +1,4 @@
-package com.ep4.survivethealiens;
+package com.ep4.survivethealiens.Helper;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

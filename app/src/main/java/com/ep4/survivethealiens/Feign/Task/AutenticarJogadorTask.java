@@ -11,8 +11,12 @@ import com.ep4.survivethealiens.Activity.PrincipalActivity;
 import com.ep4.survivethealiens.Feign.Request.JogadorRequests;
 import com.ep4.survivethealiens.Model.Credenciais;
 import com.ep4.survivethealiens.Model.Jogador;
+import com.ep4.survivethealiens.Model.Missao;
+import com.ep4.survivethealiens.Model.MissaoJogador;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 
 import feign.Feign;
 import feign.Logger;
@@ -26,6 +30,8 @@ import feign.gson.GsonEncoder;
 public class AutenticarJogadorTask extends AsyncTask<Credenciais, Void, Jogador> {
 
     Jogador jogador;
+    ArrayList<MissaoJogador> missaoJogadorArrayList;
+    ArrayList<Missao> missaoList;
     LoginActivity myActivity;
     boolean userVerified;
     private Context myContext;
@@ -46,11 +52,15 @@ public class AutenticarJogadorTask extends AsyncTask<Credenciais, Void, Jogador>
                     .target(JogadorRequests.class, "http://survivethealiens.azurewebsites.net/api/");// lá em PostagemRequest, as URIS
             //serão pegas a partir desta URL
             jogador = request.autenticarJogador(params[0]);
-            if(jogador != null)
+
+            if(jogador != null) {
                 userVerified = true;
+                missaoJogadorArrayList = request.getMissoesById(jogador.getId());
+                missaoList = request.getMissoes();
+            }
         }catch (Exception e){
             userVerified = false;
-            System.err.println("Erro de comunicação,");
+            System.err.println("Erro de comunicação.");
             e.printStackTrace();
         }
         return jogador;
@@ -61,6 +71,8 @@ public class AutenticarJogadorTask extends AsyncTask<Credenciais, Void, Jogador>
         try {
             pDialog = new ProgressDialog(myContext);
             pDialog.setMessage("Autenticando usuário...");
+            pDialog.setCancelable(false);
+            pDialog.setCanceledOnTouchOutside(false);
             pDialog.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -70,13 +82,14 @@ public class AutenticarJogadorTask extends AsyncTask<Credenciais, Void, Jogador>
     @Override
     protected void onPostExecute(Jogador jogador) {
         try {
+            pDialog.dismiss();
             if(userVerified){
-
-                GetMissaoByJogadorTask getMissaoByJogadorTask = new GetMissaoByJogadorTask(myActivity, myContext);
-
-                getMissaoByJogadorTask.execute(jogador.getId());
+//                GetMissaoByJogadorTask getMissaoByJogadorTask = new GetMissaoByJogadorTask(myActivity, myContext);
+//                getMissaoByJogadorTask.execute(jogador.getId());
 
                 myActivity.jogador = this.jogador;
+                LoginActivity.missaoList = this.missaoList;
+                LoginActivity.missaoJogadorList = missaoJogadorArrayList;
                 Intent intent = new Intent(myActivity, PrincipalActivity.class);
                 EventBus.getDefault().postSticky(jogador);
                 myActivity.startActivity(intent);
@@ -88,6 +101,6 @@ public class AutenticarJogadorTask extends AsyncTask<Credenciais, Void, Jogador>
         }catch (Exception e){
             e.printStackTrace();
         }
-        pDialog.dismiss();
+        //pDialogMissoes.dismiss();
     }
 }

@@ -1,5 +1,6 @@
 package com.ep4.survivethealiens.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import com.ep4.survivethealiens.Feign.Task.GetJogadorTask;
 import com.ep4.survivethealiens.Feign.Task.GetMissaoByJogadorTask;
 import com.ep4.survivethealiens.Model.Credenciais;
 import com.ep4.survivethealiens.Model.Jogador;
+import com.ep4.survivethealiens.Model.Missao;
 import com.ep4.survivethealiens.Model.MissaoJogador;
 import com.ep4.survivethealiens.R;
 
@@ -32,6 +34,11 @@ public class LoginActivity extends AppCompatActivity {
     public Jogador jogador;
     AutenticarJogadorTask autenticarJogadorTask;
     public static ArrayList<MissaoJogador> missaoJogadorList;
+    public static ArrayList<Missao> missaoList;
+
+    public static boolean autenticado = false;
+
+    public ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         textViewAppName = (TextView) findViewById(R.id.textViewAppName);
 
         missaoJogadorList = new ArrayList<>();
+        missaoList = new ArrayList<>();
 
         //para garantir que a internet será acessada
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -72,6 +80,9 @@ public class LoginActivity extends AppCompatActivity {
 
         Credenciais credenciais = new Credenciais(email, senha);
 
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Autenticando usuário...");
+        pDialog.show();
         try{
             autenticarJogadorTask = new AutenticarJogadorTask(this, this);
             autenticarJogadorTask.execute(credenciais);

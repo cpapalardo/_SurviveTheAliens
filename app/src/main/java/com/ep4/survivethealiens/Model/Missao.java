@@ -9,6 +9,7 @@ public class Missao {
     private String Nome;
     private Capitulo Capitulo;
     private int Numero;
+    private boolean liberada;
 
     public int getId() {
         return Id;
@@ -48,6 +49,14 @@ public class Missao {
 
     public void setNumero(int numero) {
         Numero = numero;
+    }
+
+    public boolean isLiberada() {
+        return liberada;
+    }
+
+    public void setLiberada(boolean liberada) {
+        this.liberada = liberada;
     }
 }
 

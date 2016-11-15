@@ -1,4 +1,4 @@
-package com.ep4.survivethealiens;
+package com.ep4.survivethealiens.Helper;
 
 import android.os.Handler;
 import android.util.Log;
