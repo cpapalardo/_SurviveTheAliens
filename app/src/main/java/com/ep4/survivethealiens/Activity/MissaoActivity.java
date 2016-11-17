@@ -2,6 +2,7 @@ package com.ep4.survivethealiens.Activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
@@ -47,6 +48,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
     Handler m_handler;
     Runnable m_handlerTask;
     Chronometer chronometerTempoJogo;
+    boolean isGPSEnabled = false;
 
     ArrayList<LatLng> pontoList = new ArrayList<LatLng>();
     int times=0;
@@ -113,7 +115,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         @Override
         public void run() {
             try {
-                if(!pausarMissao) {
+                if(!pausarMissao && isGPSEnabled) {
                     if (gpsTrackerHelper.canGetLocation()) {
                         double latitude = gpsTrackerHelper.getLatitude();
                         double longitude = gpsTrackerHelper.getLongitude();
@@ -146,8 +148,6 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                 System.err.println("DEU RUIM NO GPS");
                 e.printStackTrace();
             } finally {
-//                tempoPassado++;
-//                infotext.setText(String.format("%02d:%02d:%02d", tempoPassado / 3600, (tempoPassado % 3600) / 60, (tempoPassado % 60)));
 
                 for(int i = 0; i < pontoList.size()-1; i++){
                     Location location = new Location("");
@@ -160,8 +160,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
 
                     distanciaEmMetros += location.distanceTo(location2);
                 }
-                //Thread.sleep(10000);
-                //SystemClock.sleep(10000);
+
             }
         }
     };
@@ -172,7 +171,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         public void run() {
             while(true) {
                 try {
-                    if(!pausarMissao) {
+                    if(!pausarMissao && isGPSEnabled) {
                         if (gpsTrackerHelper.canGetLocation()) {
                             double latitude = gpsTrackerHelper.getLatitude();
                             double longitude = gpsTrackerHelper.getLongitude();
@@ -186,8 +185,6 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                     System.err.println("DEU RUIM NO GPS");
                     e.printStackTrace();
                 } finally {
-                    //Thread.sleep(10000);
-                    //SystemClock.sleep(10000);
                 }
             }
         }
@@ -212,18 +209,18 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
+            isGPSEnabled = true;
         } else {
-            // Show rationale and request permission.
+            // Requisição de localização.
+            isGPSEnabled = false;
+            Intent gpsOptionsIntent = new Intent(
+                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(gpsOptionsIntent);
             Toast.makeText(this, "Por favor, ative a localização.", Toast.LENGTH_LONG).show();
 //            ActivityCompat.requestPermissions(this,
 //                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
 //                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
         }
-        //map.setMyLocationEnabled(true);
-        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
-
-        // map.addMarker(new MarkerOptions().title("Sydney").snippet("The most populous city in Australia.").position(sydney));
-        // map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-33.867, 151.206), 18));
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,10, ));
