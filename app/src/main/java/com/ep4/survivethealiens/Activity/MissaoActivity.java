@@ -8,6 +8,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,7 +21,6 @@ import android.widget.Toast;
 import com.ep4.survivethealiens.Helper.GpsTrackerHelper;
 import com.ep4.survivethealiens.R;
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -31,24 +31,18 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * Created by aluno on 07/10/2016.
- */
 public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener/*, LocationListener, GoogleApiClient.ConnectionCallbacks*/{
-
     MapFragment mapFragment;
     GoogleMap mapa;
     Location location;
     GpsTrackerHelper gpsTrackerHelper;
-    TextView infotext;
+    TextView infotext, textViewTempoValor;
     Context context;
     Handler m_handler;
     Runnable m_handlerTask;
@@ -57,8 +51,10 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
     ArrayList<LatLng> pontoList = new ArrayList<LatLng>();
     int times=0;
     long tempoPassado = 0;
-    float distanciaEmMetros = 0;
+    float distanciaEmMetros = LoginActivity.distancia;
     boolean pausarMissao = false;
+    long kmIntro, kmApice, kmConclusao;
+    long conclusaoIntro, conclusaoApice, conclusao;
 
     LocationManager locationManager;
     private static final long POLLING_FREQ = 1000 * 30;
@@ -70,6 +66,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         setContentView(R.layout.activity_missao);
 
         infotext = (TextView) findViewById(R.id.infotext);
+        textViewTempoValor = (TextView) findViewById(R.id.textViewTempoValor);
         chronometerTempoJogo = (Chronometer) findViewById(R.id.chronometerTempoJogo);
 
         mapFragment = (MapFragment) getFragmentManager()
@@ -79,6 +76,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         context = this;
         gpsTrackerHelper = new GpsTrackerHelper(this);
 
+        textViewTempoValor.setText(String.valueOf(LoginActivity.distancia));
         timer.schedule(timerTask, 2000, 5000);
         chronometerTempoJogo.start();
 
@@ -129,13 +127,27 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                         gpsTrackerHelper.showSettingsAlert();
                     }
                 }
+
+                LoginActivity.distancia = distanciaEmMetros;
+                textViewTempoValor.setText(String.valueOf(LoginActivity.distancia));
+
+                //código com posição possivelmente incorreta
+                if (distanciaEmMetros >= kmIntro && distanciaEmMetros < kmApice) {
+                    conclusaoIntro = chronometerTempoJogo.getBase();
+
+                } else if (distanciaEmMetros >= kmApice && distanciaEmMetros < kmConclusao) {
+                    conclusaoApice = chronometerTempoJogo.getBase();
+
+                } else if (distanciaEmMetros >= kmConclusao) {
+                    conclusao = chronometerTempoJogo.getBase();
+
+                }
             } catch (Exception e) {
                 System.err.println("DEU RUIM NO GPS");
                 e.printStackTrace();
             } finally {
 //                tempoPassado++;
-//                infotext.setText(String.format("%02d:%02d:%02d", tempoPassado / 3600,
-//                        (tempoPassado % 3600) / 60, (tempoPassado % 60)));
+//                infotext.setText(String.format("%02d:%02d:%02d", tempoPassado / 3600, (tempoPassado % 3600) / 60, (tempoPassado % 60)));
 
                 for(int i = 0; i < pontoList.size()-1; i++){
                     Location location = new Location("");
@@ -147,7 +159,6 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                     location2.setLongitude(pontoList.get(i+1).longitude);
 
                     distanciaEmMetros += location.distanceTo(location2);
-
                 }
                 //Thread.sleep(10000);
                 //SystemClock.sleep(10000);
@@ -211,8 +222,8 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         //map.setMyLocationEnabled(true);
         //map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
 
-       // map.addMarker(new MarkerOptions().title("Sydney").snippet("The most populous city in Australia.").position(sydney));
-       // map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-33.867, 151.206), 18));
+        // map.addMarker(new MarkerOptions().title("Sydney").snippet("The most populous city in Australia.").position(sydney));
+        // map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-33.867, 151.206), 18));
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,10, ));
@@ -271,33 +282,15 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
 
     }
 
-    public void pausarContinuar(View view){
-        switch (view.getTag().toString()){
-            case "Continuar":
-                chronometerTempoJogo.setBase(tempoPassado);
-                chronometerTempoJogo.start();
-                pausarMissao = true;
-                break;
-            case "Pausar":
-                tempoPassado = chronometerTempoJogo.getBase();
-                chronometerTempoJogo.stop();
-                pausarMissao = false;
-                break;
-        }
+    public void pausar(View view){
+        pausarMissao = false;
+        tempoPassado = chronometerTempoJogo.getBase() - SystemClock.elapsedRealtime();
+        chronometerTempoJogo.stop();
     }
 
-//    private Double getCurrentSpeed(long now, long maxAge) {
-//        if (oldLocation == null)
-//            return null;
-//        if (now > oldLocation.getTime() + maxAge)
-//            return null;
-//        double speed = oldLocation.getSpeed();
-//        if ((!oldLocation.hasSpeed() || speed == 0.0f)
-//                && oldLocation != null && location != null &&
-//                oldLocation.getTime() > location.getTime() ) {
-//            //Some Android (at least emulators) do not implement getSpeed() (even if hasSpeed() is true)
-//            speed = oldLocation.distanceTo(location) * 1000 / (oldLocation.getTime() - location.getTime());
-//        }
-//        return speed;
-//    }
+    public void continuar(View view){
+        pausarMissao = true;
+        chronometerTempoJogo.setBase(tempoPassado + SystemClock.elapsedRealtime());
+        chronometerTempoJogo.start();
+    }
 }

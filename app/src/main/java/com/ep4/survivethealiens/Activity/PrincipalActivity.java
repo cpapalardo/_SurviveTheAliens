@@ -1,9 +1,12 @@
 package com.ep4.survivethealiens.Activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ep4.survivethealiens.Model.Jogador;
 import com.ep4.survivethealiens.R;

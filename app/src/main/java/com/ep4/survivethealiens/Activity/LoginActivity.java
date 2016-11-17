@@ -24,14 +24,13 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
-/**
- * Created by aluno on 07/10/2016.
- */
 public class LoginActivity extends AppCompatActivity {
     EditText editTextEmail;
     EditText editTextSenha;
     TextView textViewAppName;
     public Jogador jogador;
+    public static float distancia = 0;
+    public static long tempo = 0;
     AutenticarJogadorTask autenticarJogadorTask;
     public static ArrayList<MissaoJogador> missaoJogadorList;
     public static ArrayList<Missao> missaoList;

@@ -93,7 +93,7 @@ public class AutenticarJogadorTask extends AsyncTask<Credenciais, Void, Jogador>
                 Intent intent = new Intent(myActivity, PrincipalActivity.class);
                 EventBus.getDefault().postSticky(jogador);
                 myActivity.startActivity(intent);
-                Toast.makeText(myContext, "Olá de novo, " + jogador.getApelido(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(myContext, "Olá de novo, " + jogador.getApelido() + "!", Toast.LENGTH_SHORT).show();
             }else{
                 //ou e-mail em uso
                 Toast.makeText(myContext, "Houve um problema ao efetuar a autenticação. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
