@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="56dp"
+        android:paddingTop="50dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
         android:focusableInTouchMode="true"
@@ -19,8 +19,9 @@
             android:text="Survive the Aliens"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewAppName"
-            android:textSize="30dp"/>
+            android:id="@+id/textViewAppNameCadastro"
+            android:textSize="30dp"
+            android:layout_gravity="center"/>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -91,12 +92,20 @@
                 />
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:id="@+id/textErroCadastro"/>
+
         <Button
             android:id="@+id/btn_registrar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="15dp"
             android:padding="12dp"
             android:text="Registrar"
             android:onClick="cadastrar"

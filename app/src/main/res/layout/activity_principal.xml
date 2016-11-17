@@ -60,70 +60,120 @@
     </android.support.v7.widget.CardView>
 
     <LinearLayout
-        android:id="@+id/buttonPrimeiraLinha"
-        android:layout_below="@+id/card_view"
+    android:id="@+id/buttonPrimeiraLinha"
+    android:layout_below="@+id/card_view"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+        <Button
+        android:id="@+id/buttonHistoria"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:layout_height="60dp"
+        android:layout_weight="1"
+        android:text="História"
+        android:onClick="abrirHistoria"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:padding="12dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+            android:drawableLeft="@drawable/book32"
+        />
 
         <Button
-            android:id="@+id/buttonHistoria"
-            android:layout_width="40dp"
-            android:layout_height="130dp"
-            android:layout_weight="1"
-            android:text="História"
-            android:onClick="abrirHistoria"
+        android:id="@+id/buttonPerfil"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_weight="1"
+        android:text="Perfil"
+        android:onClick="abrirPerfil"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="10dp"
-            android:padding="12dp"
-            style="@style/Widget.AppCompat.Button.Colored"
-            />
+            android:layout_marginBottom="10dp"
+        android:padding="12dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+            android:drawableLeft="@drawable/editprofile32"
+        />
 
         <Button
-            android:id="@+id/buttonOpcoes"
-            android:layout_width="40dp"
-            android:layout_height="130dp"
-            android:layout_weight="1"
-            android:text="Opções"
+        android:id="@+id/buttonOpcoes"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_weight="1"
+        android:text="Opções"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="10dp"
             android:padding="12dp"
-            style="@style/Widget.AppCompat.Button.Colored"
-            />
+        style="@style/Widget.AppCompat.Button.Colored"
+            android:drawableLeft="@drawable/options32"
+        />
+
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_below="@+id/buttonPrimeiraLinha"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+    <!--<LinearLayout-->
+        <!--android:id="@+id/buttonPrimeiraLinha"-->
+        <!--android:layout_below="@+id/card_view"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--&gt;-->
 
-        <Button
-            android:id="@+id/buttonPerfil"
-            android:layout_width="40dp"
-            android:layout_height="130dp"
-            android:layout_weight="1"
-            android:text="Perfil"
-            android:onClick="abrirPerfil"
-            android:layout_marginBottom="24dp"
-            android:layout_marginRight="10dp"
-            android:padding="12dp"
-            style="@style/Widget.AppCompat.Button.Colored"
-            />
+        <!--<Button-->
+            <!--android:id="@+id/buttonHistoria"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="130dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="História"-->
+            <!--android:onClick="abrirHistoria"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:padding="12dp"-->
+            <!--style="@style/Widget.AppCompat.Button.Colored"-->
+            <!--/>-->
 
-        <Button
-            android:id="@+id/buttonAjuda"
-            android:layout_width="40dp"
-            android:layout_height="130dp"
-            android:layout_weight="1"
-            android:text="Ajuda"
-            android:layout_marginBottom="24dp"
-            android:padding="12dp"
-            style="@style/Widget.AppCompat.Button.Colored"
-            />
-    </LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/buttonOpcoes"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="130dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="Opções"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:padding="12dp"-->
+            <!--style="@style/Widget.AppCompat.Button.Colored"-->
+            <!--/>-->
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_below="@+id/buttonPrimeiraLinha"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--&gt;-->
+
+        <!--<Button-->
+            <!--android:id="@+id/buttonPerfil"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="130dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="Perfil"-->
+            <!--android:onClick="abrirPerfil"-->
+            <!--android:layout_marginBottom="24dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:padding="12dp"-->
+            <!--style="@style/Widget.AppCompat.Button.Colored"-->
+            <!--/>-->
+
+        <!--<Button-->
+            <!--android:id="@+id/buttonAjuda"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="130dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="Ajuda"-->
+            <!--android:layout_marginBottom="24dp"-->
+            <!--android:padding="12dp"-->
+            <!--style="@style/Widget.AppCompat.Button.Colored"-->
+            <!--/>-->
+    <!--</LinearLayout>-->
 </RelativeLayout>
 
