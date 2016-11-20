@@ -23,6 +23,8 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ep4.survivethealiens.Feign.Task.AtualizarDadosTask;
+import com.ep4.survivethealiens.Feign.Task.PutJogadorTask;
 import com.ep4.survivethealiens.Helper.GpsTrackerHelper;
 import com.ep4.survivethealiens.Helper.SaveSharedPreference;
 import com.ep4.survivethealiens.Model.Jogador;
@@ -71,7 +73,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
     Jogador jogador;
 
     DecimalFormat df = new DecimalFormat("0.##");
-    Missao missao;
+    public Missao missao;
 
     LocationManager locationManager;
     private static final long POLLING_FREQ = 1000 * 30;
@@ -217,6 +219,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                 missaoCompleta = true;
                 chronometerTempoJogo.stop();
                 conclusao = chronometerTempoJogo.getBase();
+                atualizarDados();
 
                 mp = MediaPlayer.create(MissaoActivity.this, R.raw.starlight);
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -227,35 +230,10 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                 });
                 mp.start();
 
-                missao.setConcluida(true);
+                //missao.setConcluida(true);
             }
         }
     };
-
-
-//    private final Runnable textRunnable = new Runnable() {
-//        @Override
-//        public void run() {
-//            while(true) {
-//                try {
-//                    if(!pausarMissao && isGPSEnabled) {
-//                        if (gpsTrackerHelper.canGetLocation()) {
-//                            double latitude = gpsTrackerHelper.getLatitude();
-//                            double longitude = gpsTrackerHelper.getLongitude();
-//                            Toast.makeText(context, latitude + " " + longitude, Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            Toast.makeText(context, "DEU RUIM NO ELSE", Toast.LENGTH_SHORT).show();
-//                            gpsTrackerHelper.showSettingsAlert();
-//                        }
-//                    }
-//                } catch (Exception e) {
-//                    System.err.println("DEU RUIM NO GPS");
-//                    e.printStackTrace();
-//                } finally {
-//                }
-//            }
-//        }
-//    };
 
     @Override
     public void onMapReady(GoogleMap map) {
@@ -277,15 +255,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
         } else {
-//            // Requisição de localização.
-//            isGPSEnabled = false;
-//            Intent gpsOptionsIntent = new Intent(
-//                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//            startActivity(gpsOptionsIntent);
-//            Toast.makeText(this, "Por favor, ative a localização.", Toast.LENGTH_LONG).show();
-////            ActivityCompat.requestPermissions(this,
-////                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-////                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
         }
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -375,6 +345,14 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public void onLocationChanged(Location location) {
 
+    }
+
+    public void atualizarDados(){
+        //parando as threads?
+        timer.cancel();
+        m_handler.removeCallbacks(m_handlerTask);
+        //atualizando jogador e missaoJogador
+        new AtualizarDadosTask(this, this).execute(jogador);
     }
 
     public void pausar(View view){

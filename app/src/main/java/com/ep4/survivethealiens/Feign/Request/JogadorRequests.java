@@ -1,5 +1,7 @@
 package com.ep4.survivethealiens.Feign.Request;
 
+import android.content.Intent;
+
 import com.ep4.survivethealiens.Model.Credenciais;
 import com.ep4.survivethealiens.Model.Jogador;
 import com.ep4.survivethealiens.Model.Missao;
@@ -44,4 +46,8 @@ public interface JogadorRequests {
 
     @RequestLine("GET Missaos/")
     ArrayList<Missao> getMissoes();
+
+    @RequestLine("PUT MissaoJogadors/{id}/")
+    @Headers("Content-Type: application/json")
+    MissaoJogador putMissaoJogador(@Param("id")Integer id, MissaoJogador missaoJogador);
 }

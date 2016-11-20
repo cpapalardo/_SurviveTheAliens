@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText editTextEmail;
     EditText editTextSenha;
     TextView textViewAppName;
-    public Jogador jogador;
+    public static Jogador jogador;
     public static float distancia = 0;
     public static long tempo = 0;
     AutenticarJogadorTask autenticarJogadorTask;
