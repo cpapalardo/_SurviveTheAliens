@@ -41,7 +41,7 @@ public class TabFragmentCapitulo1 extends Fragment{
                     Missao missao = LoginActivity.missaoList.get(position);
 
                     if(missao.isLiberada()){
-                        new EventBus().postSticky(missao);
+                        EventBus.getDefault().postSticky(missao);
                          Intent detailIntent = new Intent(getContext(), MissaoActivity.class);
                         startActivity(detailIntent);
                     }else

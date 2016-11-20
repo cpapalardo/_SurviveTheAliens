@@ -43,8 +43,7 @@ public class PrincipalActivity extends AppCompatActivity {
             missao = LoginActivity.missaoList.get(LoginActivity.missaoList.size()-1);
         }
         textViewNomeMissao.setText(missao.getNome());
-        EventBus eventBus = new EventBus();
-        eventBus.post(missao);
+        EventBus.getDefault().postSticky(missao);
 
         //jogador = EventBus.getDefault().getStickyEvent(Jogador.class);
     }
@@ -65,8 +64,7 @@ public class PrincipalActivity extends AppCompatActivity {
     }
 	
 	public void retomarMissao(View v){
-        EventBus eventBus = new EventBus();
-        eventBus.post(missao);
+        EventBus.getDefault().postSticky(missao);
         Intent intent = new Intent(this, MissaoActivity.class);
         startActivity(intent);
     }

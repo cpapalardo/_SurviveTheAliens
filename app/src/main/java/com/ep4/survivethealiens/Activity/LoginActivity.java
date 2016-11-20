@@ -50,8 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         if(id > 0)
         {
             new GetMissaoByJogadorTask(this, this).execute(id);
-            EventBus eventBus = new EventBus();
-            eventBus.postSticky(SaveSharedPreference.getJogador(LoginActivity.this));
+            EventBus.getDefault().postSticky(SaveSharedPreference.getJogador(LoginActivity.this));
         }
 
         editTextEmail = (EditText) findViewById(R.id.input_email);

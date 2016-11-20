@@ -81,8 +81,8 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
-        missao = new EventBus().getStickyEvent(Missao.class);
-        new EventBus().removeStickyEvent(Missao.class);
+        missao = EventBus.getDefault().getStickyEvent(Missao.class);
+        EventBus.getDefault().removeStickyEvent(Missao.class);
 
         infotext = (TextView) findViewById(R.id.infotext);
         textViewTempoValor = (TextView) findViewById(R.id.textViewTempoValor);
