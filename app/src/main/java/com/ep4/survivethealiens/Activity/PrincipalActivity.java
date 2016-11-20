@@ -6,10 +6,12 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ep4.survivethealiens.Helper.SaveSharedPreference;
 import com.ep4.survivethealiens.Model.Jogador;
+import com.ep4.survivethealiens.Model.Missao;
 import com.ep4.survivethealiens.OpcoesActivity;
 import com.ep4.survivethealiens.R;
 
@@ -18,6 +20,8 @@ import org.greenrobot.eventbus.EventBus;
 public class PrincipalActivity extends AppCompatActivity {
 
     Jogador jogador;
+    TextView textViewNomeMissao;
+    Missao missao = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +29,28 @@ public class PrincipalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_principal);
 
         //se jogador for encontrado
-        if(SaveSharedPreference.getId(this).length() == 0)
+        if(SaveSharedPreference.getId(this) == 0)
         {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
+        textViewNomeMissao = (TextView) findViewById(R.id.textViewNomeMissao);
 
-        jogador = EventBus.getDefault().getStickyEvent(Jogador.class);
+        for (int i = 0; i < LoginActivity.missaoList.size(); i++) {
+            boolean liberada = LoginActivity.missaoList.get(i).isLiberada();
+            if(!liberada){
+                missao = LoginActivity.missaoList.get(i-1);
+                break;
+            }
+        }
+        if(missao == null){
+            missao = LoginActivity.missaoList.get(LoginActivity.missaoList.size()-1);
+        }
+        textViewNomeMissao.setText(missao.getNome());
+        EventBus eventBus = new EventBus();
+        eventBus.post(missao);
+
+        //jogador = EventBus.getDefault().getStickyEvent(Jogador.class);
     }
 
     public void abrirHistoria(View view) {
@@ -50,6 +69,8 @@ public class PrincipalActivity extends AppCompatActivity {
     }
 	
 	public void retomarMissao(View v){
+        EventBus eventBus = new EventBus();
+        eventBus.post(missao);
         Intent intent = new Intent(this, MissaoActivity.class);
         startActivity(intent);
     }

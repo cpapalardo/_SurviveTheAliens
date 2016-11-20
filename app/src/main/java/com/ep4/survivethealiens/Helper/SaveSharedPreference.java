@@ -58,9 +58,10 @@ public class SaveSharedPreference {
         //return getSharedPreferences(ctx).getString(PREF_USER_EMAIL, "");
     }
 
-    public static String getId(Context ctx)
+    public static int getId(Context ctx)
     {
-        return getSharedPreferences(ctx).getString(PREF_USER_EMAIL, "");
+        int id = getSharedPreferences(ctx).getInt(PREF_USER_ID, 0);
+        return id;
     }
 
     public static void clearAllData(View v, Context ctx)

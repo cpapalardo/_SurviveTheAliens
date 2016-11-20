@@ -69,7 +69,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         setContentView(R.layout.activity_missao);
 
         //se jogador for encontrado
-        if(SaveSharedPreference.getId(this).length() == 0)
+        if(SaveSharedPreference.getId(this) == 0)
         {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);

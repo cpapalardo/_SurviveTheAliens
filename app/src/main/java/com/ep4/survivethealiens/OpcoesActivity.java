@@ -19,7 +19,7 @@ public class OpcoesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opcoes);
-        if(SaveSharedPreference.getId(this).length() == 0)
+        if(SaveSharedPreference.getId(this) == 0)
         {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);

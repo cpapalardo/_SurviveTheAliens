@@ -91,6 +91,12 @@ public class AutenticarJogadorTask extends AsyncTask<Credenciais, Void, Jogador>
                 myActivity.jogador = this.jogador;
                 LoginActivity.missaoList = this.missaoList;
                 LoginActivity.missaoJogadorList = missaoJogadorArrayList;
+
+                for(int i = 0; i < missaoJogadorArrayList.size(); i++){
+                    if(missaoJogadorArrayList.get(i).isLiberada())
+                        missaoList.get(i).setLiberada(true);
+                }
+
                 Intent intent = new Intent(myActivity, PrincipalActivity.class);
                 EventBus.getDefault().postSticky(jogador);
                 SaveSharedPreference.setJogador(myActivity, jogador);

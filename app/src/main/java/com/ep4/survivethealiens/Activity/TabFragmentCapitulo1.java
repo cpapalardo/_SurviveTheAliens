@@ -53,7 +53,7 @@ public class TabFragmentCapitulo1 extends Fragment{
                         Toast.makeText(getContext(), "Missão: " + missao.getNome(), Toast.LENGTH_SHORT).show();
                 }
             });
-            
+
             super.onActivityCreated(savedInstanceState);
             return rootView;
         }

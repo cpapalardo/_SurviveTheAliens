@@ -2,9 +2,11 @@ package com.ep4.survivethealiens.Feign.Task;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.ep4.survivethealiens.Activity.LoginActivity;
+import com.ep4.survivethealiens.Activity.PrincipalActivity;
 import com.ep4.survivethealiens.Feign.Request.MissaoRequests;
 import com.ep4.survivethealiens.Model.Missao;
 import com.ep4.survivethealiens.Model.MissaoJogador;
@@ -71,7 +73,15 @@ public class GetMissaoByJogadorTask extends AsyncTask<Integer, Void, ArrayList<M
         try {
             myActivity.missaoJogadorList = missaoJogadors;
             myActivity.missaoList = missaoList;
+
+            for(int i = 0; i < missaoJogadorList.size(); i++){
+                if(missaoJogadorList.get(i).isLiberada())
+                    missaoList.get(i).setLiberada(true);
+            }
+
             EventBus.getDefault().postSticky(missaoJogadors);
+            Intent intent = new Intent(myContext, PrincipalActivity.class);
+            myActivity.startActivity(intent);
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -40,7 +40,7 @@ public class PerfilActivity extends AppCompatActivity implements AdapterView.OnI
         setContentView(R.layout.activity_perfil);
 
         //se jogador for encontrado
-        if(SaveSharedPreference.getId(this).length() == 0)
+        if(SaveSharedPreference.getId(this) == 0)
         {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);

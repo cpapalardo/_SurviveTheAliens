@@ -46,22 +46,20 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         //se jogador for encontrado
-        int id = SaveSharedPreference.getId(this).length();
+        int id = SaveSharedPreference.getId(this);
         if(id > 0)
         {
             new GetMissaoByJogadorTask(this, this).execute(id);
             EventBus eventBus = new EventBus();
             eventBus.postSticky(SaveSharedPreference.getJogador(LoginActivity.this));
-            Intent intent = new Intent(this, PrincipalActivity.class);
-            startActivity(intent);
         }
 
         editTextEmail = (EditText) findViewById(R.id.input_email);
         editTextSenha = (EditText) findViewById(R.id.input_password);
         textViewAppName = (TextView) findViewById(R.id.textViewAppName);
 
-        missaoJogadorList = new ArrayList<>();
-        missaoList = new ArrayList<>();
+//        missaoJogadorList = new ArrayList<>();
+//        missaoList = new ArrayList<>();
 
         //para garantir que a internet será acessada
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();

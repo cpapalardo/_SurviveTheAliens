@@ -38,7 +38,7 @@ public class CapituloActivity extends AppCompatActivity {
         setContentView(R.layout.activity_capitulo);
 
         //se jogador for encontrado
-        if(SaveSharedPreference.getId(this).length() == 0)
+        if(SaveSharedPreference.getId(this) == 0)
         {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
@@ -46,7 +46,7 @@ public class CapituloActivity extends AppCompatActivity {
         initInstancesDrawer();
 
        // getMissaoByJogadorTask = new GetMissaoByJogadorTask(this, this);
-        jogador = EventBus.getDefault().getStickyEvent(Jogador.class);
+        jogador = SaveSharedPreference.getJogador(this);
         getMissaoByJogadorTask.execute(jogador.getId());
         listView = (ListView) findViewById(R.id.listViewMissoesCap1);
     }

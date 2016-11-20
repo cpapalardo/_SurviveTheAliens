@@ -37,7 +37,7 @@ public class HistoriaActivity extends AppCompatActivity{
         setContentView(R.layout.activity_historia);
 
         //se jogador for encontrado
-        if(SaveSharedPreference.getId(this).length() == 0)
+        if(SaveSharedPreference.getId(this) == 0)
         {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);

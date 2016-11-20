@@ -39,7 +39,7 @@
                 />
 
             <TextView
-                android:id="@+id/textViewMissao"
+                android:id="@+id/textViewNomeMissao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Fuja do hospital Albert Einstein"
