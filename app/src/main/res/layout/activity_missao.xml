@@ -99,6 +99,7 @@
                 android:id="@+id/buttonPausar"
                 android:layout_weight="1"
                 android:onClick="pausar"
+                android:enabled="true"
                 style="@style/Widget.AppCompat.Button.Colored"
                 />
 
@@ -109,6 +110,7 @@
                 android:id="@+id/buttonContinuar"
                 android:layout_weight="1"
                 android:onClick="continuar"
+                android:enabled="false"
                 style="@style/Widget.AppCompat.Button.Colored"
                 />
         </LinearLayout>

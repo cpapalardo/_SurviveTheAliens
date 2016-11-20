@@ -104,7 +104,7 @@ public class AutenticarJogadorTask extends AsyncTask<Credenciais, Void, Jogador>
                 Toast.makeText(myContext, "Olá de novo, " + jogador.getApelido() + "!", Toast.LENGTH_SHORT).show();
             }else{
                 //ou e-mail em uso
-                Toast.makeText(myContext, "Houve um problema ao efetuar a autenticação. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
+                Toast.makeText(myContext, "Houve um problema ao efetuar a autenticação. Tente novamente.", Toast.LENGTH_LONG).show();
             }
         }catch (Exception e){
             e.printStackTrace();

@@ -9,20 +9,23 @@ import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ep4.survivethealiens.Helper.GpsTrackerHelper;
 import com.ep4.survivethealiens.Helper.SaveSharedPreference;
+import com.ep4.survivethealiens.Model.Jogador;
 import com.ep4.survivethealiens.Model.Missao;
 import com.ep4.survivethealiens.R;
 import com.google.android.gms.location.LocationListener;
@@ -38,6 +41,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -57,13 +61,16 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
     boolean isGPSEnabled = false;
 
     ArrayList<LatLng> pontoList = new ArrayList<LatLng>();
-    int times=0;
+    int times = 0;
     long tempoPassado = 0;
     float distanciaEmMetros = LoginActivity.distancia;
-    boolean pausarMissao = false;
-    long kmIntro, kmApice, kmConclusao;
+    boolean pausarMissao = false, introCompleta = false, apiceCompleta = false, missaoCompleta = false;
+    float kmIntro, kmApice, kmConclusao;
     long conclusaoIntro, conclusaoApice, conclusao;
+    Button buttonContinuar, buttonPausar;
+    Jogador jogador;
 
+    DecimalFormat df = new DecimalFormat("0.##");
     Missao missao;
 
     LocationManager locationManager;
@@ -76,17 +83,27 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         setContentView(R.layout.activity_missao);
 
         //se jogador for encontrado
-        if(SaveSharedPreference.getId(this) == 0)
-        {
+        if(SaveSharedPreference.getId(this) == 0) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        jogador = SaveSharedPreference.getJogador(this);
+
         missao = EventBus.getDefault().getStickyEvent(Missao.class);
         EventBus.getDefault().removeStickyEvent(Missao.class);
+        kmIntro = missao.getKmIntro();
+        kmApice = missao.getKmApice();
+        kmConclusao = missao.getKmFim();
 
         infotext = (TextView) findViewById(R.id.infotext);
         textViewTempoValor = (TextView) findViewById(R.id.textViewTempoValor);
         chronometerTempoJogo = (Chronometer) findViewById(R.id.chronometerTempoJogo);
+        buttonContinuar = (Button) findViewById(R.id.buttonContinuar);
+        buttonPausar = (Button) findViewById(R.id.buttonPausar);
 
         //pegando fragmento do mapa
         mapFragment = (MapFragment) getFragmentManager()
@@ -97,12 +114,10 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         //classe que pega localização
         gpsTrackerHelper = new GpsTrackerHelper(this);
 
-        textViewTempoValor.setText(String.valueOf(LoginActivity.distancia));
+        textViewTempoValor.setText(String.valueOf(df.format(LoginActivity.distancia)));
+
         //definindo em que momento o timer inicia e tempo para ser repetido
         timer.schedule(timerTask, 2000, 5000);
-
-        //iniciando cronômetro
-        chronometerTempoJogo.start();
 
         //handler pegando latitude e longitude de uma List e desenhando no mapa a cada 5 segundos
         m_handler = new Handler();
@@ -110,7 +125,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         {
             @Override
             public void run() {
-                if(times<pontoList.size()-1)
+                if(times < pontoList.size()-1)
                 {
                     LatLng src = pontoList.get(times);
                     LatLng dest = pontoList.get(times + 1);
@@ -138,40 +153,26 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         @Override
         public void run() {
             try {
-                if(!pausarMissao && isGPSEnabled) {
+                if(!pausarMissao && isGPSEnabled && !missaoCompleta) {
                     if (gpsTrackerHelper.canGetLocation()) {
                         double latitude = gpsTrackerHelper.getLatitude();
                         double longitude = gpsTrackerHelper.getLongitude();
                         Location l = gpsTrackerHelper.getMyLocation();
                         //Toast.makeText(context, latitude + " " + longitude, Toast.LENGTH_SHORT).show();
-                        Log.d("PASSANDO LOCALIZAÇÃO", latitude + " " + longitude);
+                        //Log.d("PASSANDO LOCALIZAÇÃO", latitude + " " + longitude);
                         pontoList.add(new LatLng(l.getLatitude(), l.getLongitude()));
                     } else {
                         // Toast.makeText(context, "DEU RUIM NO ELSE", Toast.LENGTH_SHORT).show();
-                        Log.d("PASSANDO LOCALIZAÇÃO", "DEU RUIM NO ELSE");
+                        //Log.d("PASSANDO LOCALIZAÇÃO", "DEU RUIM NO ELSE");
                         gpsTrackerHelper.showSettingsAlert();
                     }
-                }
 
-                LoginActivity.distancia = distanciaEmMetros;
-                textViewTempoValor.setText(String.valueOf(LoginActivity.distancia));
-
-                //código com posição possivelmente incorreta
-                if (distanciaEmMetros >= kmIntro && distanciaEmMetros < kmApice) {
-                    conclusaoIntro = chronometerTempoJogo.getBase();
-
-                } else if (distanciaEmMetros >= kmApice && distanciaEmMetros < kmConclusao) {
-                    conclusaoApice = chronometerTempoJogo.getBase();
-
-                } else if (distanciaEmMetros >= kmConclusao) {
-                    conclusao = chronometerTempoJogo.getBase();
-
+                    textViewTempoValor.setText(String.valueOf(df.format(LoginActivity.distancia)));
                 }
             } catch (Exception e) {
                 System.err.println("DEU RUIM NO GPS");
                 e.printStackTrace();
             } finally {
-
                 for(int i = 0; i < pontoList.size()-1; i++){
                     Location location = new Location("");
                     location.setLatitude(pontoList.get(i).latitude);
@@ -183,7 +184,50 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
 
                     distanciaEmMetros += location.distanceTo(location2);
                 }
+            }
 
+            LoginActivity.distancia = distanciaEmMetros;
+            MediaPlayer mp;
+
+            if (distanciaEmMetros >= kmIntro && distanciaEmMetros < kmApice && !introCompleta) {
+                introCompleta = true;
+                conclusaoIntro = chronometerTempoJogo.getBase();
+
+                mp = MediaPlayer.create(MissaoActivity.this, R.raw.starlight);
+                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.release();
+                    }
+                });
+                mp.start();
+            } else if (distanciaEmMetros >= kmApice && distanciaEmMetros < kmConclusao && !apiceCompleta) {
+                apiceCompleta = true;
+                conclusaoApice = chronometerTempoJogo.getBase();
+
+                mp = MediaPlayer.create(MissaoActivity.this, R.raw.starlight);
+                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.release();
+                    }
+                });
+                mp.start();
+            } else if (distanciaEmMetros >= kmConclusao && !missaoCompleta) {
+                missaoCompleta = true;
+                chronometerTempoJogo.stop();
+                conclusao = chronometerTempoJogo.getBase();
+
+                mp = MediaPlayer.create(MissaoActivity.this, R.raw.starlight);
+                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.release();
+                    }
+                });
+                mp.start();
+
+                missao.setConcluida(true);
             }
         }
     };
@@ -249,35 +293,38 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             isGPSEnabled = false;
             buildAlertMessageNoGps();
-        }
-        else{
+        } else {
             isGPSEnabled = true;
         }
-        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,10, ));
-        Criteria criteria = new Criteria();
 
-        location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-        location = getLastKnownLocation();
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())), 15));
-        if(location == null)
-        {
-            criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-            // Finds a provider that matches the criteria
-            String provider = locationManager.getBestProvider(criteria, true);
-            // Use the provider to get the last known location
-            location = locationManager.getLastKnownLocation(provider);
-        }
-        if (location != null)
-        {
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
+        if (isGPSEnabled) {
+            //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,10, ));
+            Criteria criteria = new Criteria();
 
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
-                    .zoom(17)                   // Sets the zoom
-                    .bearing(90)                // Sets the orientation of the camera to east
-                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
-                    .build();                   // Creates a CameraPosition from the builder
-            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+            location = getLastKnownLocation();
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())), 15));
+            if (location == null) {
+                criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+                // Finds a provider that matches the criteria
+                String provider = locationManager.getBestProvider(criteria, true);
+                // Use the provider to get the last known location
+                location = locationManager.getLastKnownLocation(provider);
+            }
+            if (location != null) {
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
+
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
+                        .zoom(17)                   // Sets the zoom
+                        .bearing(90)                // Sets the orientation of the camera to east
+                        .tilt(40)                   // Sets the tilt of the camera to 30 degrees
+                        .build();                   // Creates a CameraPosition from the builder
+                map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+
+            //iniciando cronômetro
+            chronometerTempoJogo.start();
         }
     }
 
@@ -331,14 +378,16 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     public void pausar(View view){
-        pausarMissao = false;
+        pausarMissao = true;
         tempoPassado = chronometerTempoJogo.getBase() - SystemClock.elapsedRealtime();
         chronometerTempoJogo.stop();
+        buttonContinuar.setEnabled(true);
     }
 
     public void continuar(View view){
-        pausarMissao = true;
+        pausarMissao = false;
         chronometerTempoJogo.setBase(tempoPassado + SystemClock.elapsedRealtime());
         chronometerTempoJogo.start();
+        buttonContinuar.setEnabled(false);
     }
 }
