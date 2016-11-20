@@ -2,6 +2,7 @@ package com.ep4.survivethealiens.Activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -86,17 +88,23 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         textViewTempoValor = (TextView) findViewById(R.id.textViewTempoValor);
         chronometerTempoJogo = (Chronometer) findViewById(R.id.chronometerTempoJogo);
 
+        //pegando fragmento do mapa
         mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.fragment_map);
         mapFragment.getMapAsync(this);
 
         context = this;
+        //classe que pega localização
         gpsTrackerHelper = new GpsTrackerHelper(this);
 
         textViewTempoValor.setText(String.valueOf(LoginActivity.distancia));
+        //definindo em que momento o timer inicia e tempo para ser repetido
         timer.schedule(timerTask, 2000, 5000);
+
+        //iniciando cronômetro
         chronometerTempoJogo.start();
 
+        //handler pegando latitude e longitude de uma List e desenhando no mapa a cada 5 segundos
         m_handler = new Handler();
         m_handlerTask = new Runnable()
         {
@@ -125,7 +133,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
 
     Timer timer = new Timer();
 
-
+    //timer busca localização e envia para a lista pontoList.
     TimerTask timerTask = new TimerTask() {
         @Override
         public void run() {
@@ -181,63 +189,70 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
     };
 
 
-    private final Runnable textRunnable = new Runnable() {
-        @Override
-        public void run() {
-            while(true) {
-                try {
-                    if(!pausarMissao && isGPSEnabled) {
-                        if (gpsTrackerHelper.canGetLocation()) {
-                            double latitude = gpsTrackerHelper.getLatitude();
-                            double longitude = gpsTrackerHelper.getLongitude();
-                            Toast.makeText(context, latitude + " " + longitude, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(context, "DEU RUIM NO ELSE", Toast.LENGTH_SHORT).show();
-                            gpsTrackerHelper.showSettingsAlert();
-                        }
-                    }
-                } catch (Exception e) {
-                    System.err.println("DEU RUIM NO GPS");
-                    e.printStackTrace();
-                } finally {
-                }
-            }
-        }
-    };
+//    private final Runnable textRunnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            while(true) {
+//                try {
+//                    if(!pausarMissao && isGPSEnabled) {
+//                        if (gpsTrackerHelper.canGetLocation()) {
+//                            double latitude = gpsTrackerHelper.getLatitude();
+//                            double longitude = gpsTrackerHelper.getLongitude();
+//                            Toast.makeText(context, latitude + " " + longitude, Toast.LENGTH_SHORT).show();
+//                        } else {
+//                            Toast.makeText(context, "DEU RUIM NO ELSE", Toast.LENGTH_SHORT).show();
+//                            gpsTrackerHelper.showSettingsAlert();
+//                        }
+//                    }
+//                } catch (Exception e) {
+//                    System.err.println("DEU RUIM NO GPS");
+//                    e.printStackTrace();
+//                } finally {
+//                }
+//            }
+//        }
+//    };
 
     @Override
     public void onMapReady(GoogleMap map) {
 
         mapa = map;
-        LatLng sydney = new LatLng(-33.867, 151.206);
         MapStyleOptions style;
         Calendar c = Calendar.getInstance();
         int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
 
+        //define o estilo do mapa conforme a hora do dia.
         if(timeOfDay >= 5 && timeOfDay < 18){
             style = MapStyleOptions.loadRawResourceStyle(this, R.raw.style_retro);
         }else{
             style = MapStyleOptions.loadRawResourceStyle(this, R.raw.style_night);
         }
-
         map.setMapStyle(style);
 
+        //verifica se possui permissão para usar localização
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
-            isGPSEnabled = true;
         } else {
-            // Requisição de localização.
-            isGPSEnabled = false;
-            Intent gpsOptionsIntent = new Intent(
-                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(gpsOptionsIntent);
-            Toast.makeText(this, "Por favor, ative a localização.", Toast.LENGTH_LONG).show();
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-//                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+//            // Requisição de localização.
+//            isGPSEnabled = false;
+//            Intent gpsOptionsIntent = new Intent(
+//                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+//            startActivity(gpsOptionsIntent);
+//            Toast.makeText(this, "Por favor, ative a localização.", Toast.LENGTH_LONG).show();
+////            ActivityCompat.requestPermissions(this,
+////                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+////                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
         }
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            isGPSEnabled = false;
+            buildAlertMessageNoGps();
+        }
+        else{
+            isGPSEnabled = true;
+        }
         //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,10, ));
         Criteria criteria = new Criteria();
 
@@ -264,6 +279,27 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                     .build();                   // Creates a CameraPosition from the builder
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Seu GPS não está ativado. Deseja ativá-lo?")
+                .setCancelable(false)
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.dismiss();
+                        Intent intent = new Intent(context, PrincipalActivity.class);
+                        startActivity(intent);
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private Location getLastKnownLocation() {

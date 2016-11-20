@@ -1,4 +1,4 @@
-package com.ep4.survivethealiens;
+package com.ep4.survivethealiens.Activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.ep4.survivethealiens.Activity.LoginActivity;
 import com.ep4.survivethealiens.Helper.SaveSharedPreference;
+import com.ep4.survivethealiens.R;
 
 public class OpcoesActivity extends AppCompatActivity {
 
