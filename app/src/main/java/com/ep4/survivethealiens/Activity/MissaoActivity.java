@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.ep4.survivethealiens.Helper.GpsTrackerHelper;
 import com.ep4.survivethealiens.Helper.SaveSharedPreference;
+import com.ep4.survivethealiens.Model.Missao;
 import com.ep4.survivethealiens.R;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,6 +33,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,6 +62,8 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
     long kmIntro, kmApice, kmConclusao;
     long conclusaoIntro, conclusaoApice, conclusao;
 
+    Missao missao;
+
     LocationManager locationManager;
     private static final long POLLING_FREQ = 1000 * 30;
     private static final long FASTEST_UPDATE_FREQ = 1000 * 5;
@@ -74,6 +79,8 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
+        missao = new EventBus().getStickyEvent(Missao.class);
+        new EventBus().removeStickyEvent(Missao.class);
 
         infotext = (TextView) findViewById(R.id.infotext);
         textViewTempoValor = (TextView) findViewById(R.id.textViewTempoValor);

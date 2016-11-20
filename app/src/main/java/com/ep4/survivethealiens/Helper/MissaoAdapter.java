@@ -76,10 +76,12 @@ public class MissaoAdapter extends BaseAdapter{
                 if(mJogador.isLiberada()) {
                     missao.setLiberada(true);
                     itemDetail.setText("Liberada");
+                    thumbnail.setImageResource((R.drawable.padlockopen64black));
                 }
                 else{
                     missao.setLiberada(false);
                     itemDetail.setText("Bloqueada");
+                    thumbnail.setImageResource(R.drawable.padlocklocked64black);
                 }
             }
         }
