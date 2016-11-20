@@ -20,6 +20,8 @@ public class SaveSharedPreference {
     static final String PREF_USER_APELIDO = "apelido";
     static final String PREF_USER_HORAS = "horas";
     static final String PREF_USER_KM = "quilometros";
+    static final String MISSAO_TEMPO = "tempo";
+    static final String MISSAO_DISTANCIA = "distancia";
 
 
 
@@ -64,10 +66,30 @@ public class SaveSharedPreference {
         return id;
     }
 
+    public static float getDistancia(Context ctx){
+        return getSharedPreferences(ctx).getFloat(MISSAO_DISTANCIA, 0);
+    }
+
+    public static float getTempo(Context ctx){
+        return  getSharedPreferences(ctx).getLong(MISSAO_TEMPO, 0);
+    }
+
+    public static void setTempoDistancia(Context ctx, float tempo, float distancia){
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        editor.putFloat(MISSAO_TEMPO, tempo);
+        editor.putFloat(MISSAO_DISTANCIA, distancia);
+    }
+
     public static void clearAllData(View v, Context ctx)
     {
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
         editor.clear(); //clear all stored data
         editor.commit();
+    }
+
+    public static void clearTempoDistancia(Context ctx){
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        editor.remove(MISSAO_DISTANCIA);
+        editor.remove(MISSAO_TEMPO);
     }
 }
