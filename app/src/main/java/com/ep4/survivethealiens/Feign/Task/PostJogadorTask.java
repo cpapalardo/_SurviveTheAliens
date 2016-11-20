@@ -3,15 +3,21 @@ package com.ep4.survivethealiens.Feign.Task;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.ep4.survivethealiens.Activity.CadastroActivity;
 import com.ep4.survivethealiens.Activity.PrincipalActivity;
 import com.ep4.survivethealiens.Feign.Request.JogadorRequests;
+import com.ep4.survivethealiens.Helper.SaveSharedPreference;
 import com.ep4.survivethealiens.Model.Jogador;
+import com.ep4.survivethealiens.Model.Missao;
+import com.ep4.survivethealiens.Model.MissaoJogador;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 
 import feign.Feign;
 import feign.Logger;
@@ -28,6 +34,8 @@ public class PostJogadorTask extends AsyncTask<Jogador, Void, Jogador> {
     boolean userVerified;
     private Context myContext;
     Jogador jogador;
+    ArrayList<MissaoJogador> missaoJogadorArrayList;
+    ArrayList<Missao> missaoList;
 
     public PostJogadorTask(CadastroActivity activity, Context context){
         myActivity = activity;
@@ -43,8 +51,11 @@ public class PostJogadorTask extends AsyncTask<Jogador, Void, Jogador> {
                     .target(JogadorRequests.class, "http://survivethealiens.azurewebsites.net/api/");// lá em PostagemRequest, as URIS
             //serão pegas a partir desta URL
             jogador = request.criarJogador(params[0]);
-            if(jogador != null)
+            if(jogador != null) {
                 userVerified = true;
+                missaoJogadorArrayList = request.getMissoesById(jogador.getId());
+                missaoList = request.getMissoes();
+            }
         }catch (Exception e){
             userVerified = false;
             System.err.println("Erro de comunicação,");
@@ -71,6 +82,7 @@ public class PostJogadorTask extends AsyncTask<Jogador, Void, Jogador> {
                 myActivity.jogador = this.jogador;
                 Intent intent = new Intent(myActivity, PrincipalActivity.class);
                 EventBus.getDefault().postSticky(jogador);
+                SaveSharedPreference.setJogador(myContext, jogador);
                 myActivity.startActivity(intent);
             }else{
                 //ou e-mail em uso

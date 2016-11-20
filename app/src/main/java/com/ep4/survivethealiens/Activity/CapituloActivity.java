@@ -1,5 +1,6 @@
 package com.ep4.survivethealiens.Activity;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.ep4.survivethealiens.Feign.Task.GetMissaoByJogadorTask;
+import com.ep4.survivethealiens.Helper.SaveSharedPreference;
 import com.ep4.survivethealiens.Model.Jogador;
 import com.ep4.survivethealiens.Model.MissaoJogador;
 import com.ep4.survivethealiens.R;
@@ -34,7 +36,15 @@ public class CapituloActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capitulo);
+
+        //se jogador for encontrado
+        if(SaveSharedPreference.getId(this).length() == 0)
+        {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
         initInstancesDrawer();
+
        // getMissaoByJogadorTask = new GetMissaoByJogadorTask(this, this);
         jogador = EventBus.getDefault().getStickyEvent(Jogador.class);
         getMissaoByJogadorTask.execute(jogador.getId());

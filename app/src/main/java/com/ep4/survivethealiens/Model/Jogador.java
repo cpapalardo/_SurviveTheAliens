@@ -28,10 +28,10 @@ public class Jogador {
     private String Senha;
 
     @SerializedName("HorasJogadas")
-    private Integer HorasJogadas;
+    private Float HorasJogadas;
 
     @SerializedName("KmCaminhados")
-    private Integer KmCaminhados;
+    private Float KmCaminhados;
 
     public Jogador(){
 
@@ -43,8 +43,8 @@ public class Jogador {
         this.Nome = nome;
         this.Apelido = apelido;
         this.Genero = genero;
-        HorasJogadas = 0;
-        KmCaminhados = 0;
+        HorasJogadas = 0f;
+        KmCaminhados = 0f;
         Id = 0;
     }
 
@@ -99,19 +99,19 @@ public class Jogador {
         this.Senha = senha;
     }
 
-    public int getHorasJogadas() {
+    public float getHorasJogadas() {
         return HorasJogadas;
     }
 
-    public void setHorasJogadas(int horasJogadas) {
+    public void setHorasJogadas(float horasJogadas) {
         this.HorasJogadas = horasJogadas;
     }
 
-    public int getKmCaminhados() {
+    public float getKmCaminhados() {
         return KmCaminhados;
     }
 
-    public void setKmCaminhados(int kmCaminhados) {
+    public void setKmCaminhados(float kmCaminhados) {
         this.KmCaminhados = kmCaminhados;
     }
 }

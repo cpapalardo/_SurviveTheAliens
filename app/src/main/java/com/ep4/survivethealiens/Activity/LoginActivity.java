@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.ep4.survivethealiens.Feign.Task.AutenticarJogadorTask;
 import com.ep4.survivethealiens.Feign.Task.GetJogadorTask;
 import com.ep4.survivethealiens.Feign.Task.GetMissaoByJogadorTask;
+import com.ep4.survivethealiens.Helper.SaveSharedPreference;
 import com.ep4.survivethealiens.Model.Credenciais;
 import com.ep4.survivethealiens.Model.Jogador;
 import com.ep4.survivethealiens.Model.Missao;
@@ -43,6 +44,17 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //se jogador for encontrado
+        int id = SaveSharedPreference.getId(this).length();
+        if(id > 0)
+        {
+            new GetMissaoByJogadorTask(this, this).execute(id);
+            EventBus eventBus = new EventBus();
+            eventBus.postSticky(SaveSharedPreference.getJogador(LoginActivity.this));
+            Intent intent = new Intent(this, PrincipalActivity.class);
+            startActivity(intent);
+        }
 
         editTextEmail = (EditText) findViewById(R.id.input_email);
         editTextSenha = (EditText) findViewById(R.id.input_password);
@@ -99,7 +111,6 @@ public class LoginActivity extends AppCompatActivity {
     public void iniciarTelaCadastro(View v){
         Intent intent = new Intent(this, CadastroActivity.class);
         startActivity(intent);
-        //Toast.makeText(this, "Ainda não tem nada aqui", Toast.LENGTH_SHORT).show();
     }
 
     public void iniciarTelaPrincipal(){

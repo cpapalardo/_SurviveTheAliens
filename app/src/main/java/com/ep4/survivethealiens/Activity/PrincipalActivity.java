@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.ep4.survivethealiens.Helper.SaveSharedPreference;
 import com.ep4.survivethealiens.Model.Jogador;
+import com.ep4.survivethealiens.OpcoesActivity;
 import com.ep4.survivethealiens.R;
 
 import org.greenrobot.eventbus.EventBus;
@@ -21,6 +23,14 @@ public class PrincipalActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
+
+        //se jogador for encontrado
+        if(SaveSharedPreference.getId(this).length() == 0)
+        {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+
         jogador = EventBus.getDefault().getStickyEvent(Jogador.class);
     }
 
@@ -31,6 +41,11 @@ public class PrincipalActivity extends AppCompatActivity {
 
     public void abrirPerfil(View view) {
         Intent intent = new Intent(this, PerfilActivity.class);
+        startActivity(intent);
+    }
+
+    public void abrirOpcoes(View view){
+        Intent intent = new Intent(this, OpcoesActivity.class);
         startActivity(intent);
     }
 	

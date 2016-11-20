@@ -1,5 +1,6 @@
 package com.ep4.survivethealiens.Activity;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.ep4.survivethealiens.Feign.Task.GetMissaoByJogadorTask;
+import com.ep4.survivethealiens.Helper.SaveSharedPreference;
 import com.ep4.survivethealiens.Model.Jogador;
 import com.ep4.survivethealiens.Model.MissaoJogador;
 import com.ep4.survivethealiens.Helper.PagerAdapter;
@@ -33,6 +35,14 @@ public class HistoriaActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historia);
+
+        //se jogador for encontrado
+        if(SaveSharedPreference.getId(this).length() == 0)
+        {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

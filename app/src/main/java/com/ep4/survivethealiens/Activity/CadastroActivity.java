@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ep4.survivethealiens.Feign.Task.PostJogadorTask;
+import com.ep4.survivethealiens.Helper.SaveSharedPreference;
 import com.ep4.survivethealiens.Model.Jogador;
 import com.ep4.survivethealiens.R;
 
@@ -107,7 +108,7 @@ public class CadastroActivity extends AppCompatActivity implements AdapterView.O
                 textEmail.getText().toString(), textSenha.getText().toString(), genero);
 
         try{
-            postJogadorTask.execute(jogador);
+            new PostJogadorTask(this, this).execute(jogador);
         }catch (Exception e){
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }

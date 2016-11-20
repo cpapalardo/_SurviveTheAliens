@@ -1,5 +1,6 @@
 package com.ep4.survivethealiens.Activity;
 
+import android.content.Intent;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.ep4.survivethealiens.Feign.Task.AutenticarJogadorTask;
 import com.ep4.survivethealiens.Feign.Task.PutJogadorTask;
+import com.ep4.survivethealiens.Helper.SaveSharedPreference;
 import com.ep4.survivethealiens.Model.Jogador;
 import com.ep4.survivethealiens.R;
 
@@ -37,10 +39,17 @@ public class PerfilActivity extends AppCompatActivity implements AdapterView.OnI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
 
+        //se jogador for encontrado
+        if(SaveSharedPreference.getId(this).length() == 0)
+        {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        jogador = EventBus.getDefault().getStickyEvent(Jogador.class);
+        jogador = SaveSharedPreference.getJogador(this);
 
         textNome = (TextView) findViewById(R.id.textNome);
         textApelido = (TextView) findViewById(R.id.textApelido);

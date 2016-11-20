@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ep4.survivethealiens.Helper.GpsTrackerHelper;
+import com.ep4.survivethealiens.Helper.SaveSharedPreference;
 import com.ep4.survivethealiens.R;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -66,6 +67,13 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_missao);
+
+        //se jogador for encontrado
+        if(SaveSharedPreference.getId(this).length() == 0)
+        {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
 
         infotext = (TextView) findViewById(R.id.infotext);
         textViewTempoValor = (TextView) findViewById(R.id.textViewTempoValor);

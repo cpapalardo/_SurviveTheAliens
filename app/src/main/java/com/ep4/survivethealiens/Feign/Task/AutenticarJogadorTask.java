@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.ep4.survivethealiens.Activity.LoginActivity;
 import com.ep4.survivethealiens.Activity.PrincipalActivity;
 import com.ep4.survivethealiens.Feign.Request.JogadorRequests;
+import com.ep4.survivethealiens.Helper.SaveSharedPreference;
 import com.ep4.survivethealiens.Model.Credenciais;
 import com.ep4.survivethealiens.Model.Jogador;
 import com.ep4.survivethealiens.Model.Missao;
@@ -92,6 +93,7 @@ public class AutenticarJogadorTask extends AsyncTask<Credenciais, Void, Jogador>
                 LoginActivity.missaoJogadorList = missaoJogadorArrayList;
                 Intent intent = new Intent(myActivity, PrincipalActivity.class);
                 EventBus.getDefault().postSticky(jogador);
+                SaveSharedPreference.setJogador(myActivity, jogador);
                 myActivity.startActivity(intent);
                 Toast.makeText(myContext, "Olá de novo, " + jogador.getApelido() + "!", Toast.LENGTH_SHORT).show();
             }else{

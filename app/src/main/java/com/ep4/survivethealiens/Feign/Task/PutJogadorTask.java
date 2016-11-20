@@ -10,6 +10,7 @@ import com.ep4.survivethealiens.Activity.CadastroActivity;
 import com.ep4.survivethealiens.Activity.PerfilActivity;
 import com.ep4.survivethealiens.Activity.PrincipalActivity;
 import com.ep4.survivethealiens.Feign.Request.JogadorRequests;
+import com.ep4.survivethealiens.Helper.SaveSharedPreference;
 import com.ep4.survivethealiens.Model.Jogador;
 
 import org.greenrobot.eventbus.EventBus;
@@ -72,6 +73,9 @@ public class PutJogadorTask extends AsyncTask<Jogador, Void, Jogador> {
             if(userVerified){
                 myActivity.jogador = this.jogador;
                 Toast.makeText(myContext, "Os dados foram atualizados com sucesso.", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(myContext, PrincipalActivity.class);
+                SaveSharedPreference.setJogador(myContext, jogador);
+                myActivity.startActivity(intent);
             }else{
                 Toast.makeText(myContext, "Houve um problema ao atualizar o cadastro. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
             }
