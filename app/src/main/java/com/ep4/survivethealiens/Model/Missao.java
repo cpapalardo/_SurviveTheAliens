@@ -10,6 +10,9 @@ public class Missao {
     private Capitulo Capitulo;
     private int Numero;
     private boolean liberada;
+    private float KmIntro;
+    private float KmApice;
+    private float KmFim;
 
     public int getId() {
         return Id;
@@ -57,6 +60,30 @@ public class Missao {
 
     public void setLiberada(boolean liberada) {
         this.liberada = liberada;
+    }
+
+    public float getKmIntro() {
+        return KmIntro;
+    }
+
+    public void setKmIntro(float kmIntro) {
+        KmIntro = kmIntro;
+    }
+
+    public float getKmFim() {
+        return KmFim;
+    }
+
+    public void setKmFim(float kmFim) {
+        KmFim = kmFim;
+    }
+
+    public float getKmApice() {
+        return KmApice;
+    }
+
+    public void setKmApice(float kmApice) {
+        KmApice = kmApice;
     }
 }
 
