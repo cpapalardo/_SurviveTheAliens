@@ -229,8 +229,6 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                     }
                 });
                 mp.start();
-
-                //missao.setConcluida(true);
             }
         }
     };
@@ -352,6 +350,9 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         timer.cancel();
         m_handler.removeCallbacks(m_handlerTask);
         //atualizando jogador e missaoJogador
+        jogador.setHorasJogadas(conclusao + jogador.getHorasJogadas());
+        float distanciaTotal = distanciaEmMetros + jogador.getKmCaminhados();
+        jogador.setKmCaminhados(distanciaTotal);
         new AtualizarDadosTask(this, this).execute(jogador);
     }
 
