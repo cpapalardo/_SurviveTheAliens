@@ -64,7 +64,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
 
     ArrayList<LatLng> pontoList = new ArrayList<LatLng>();
     int times = 0;
-    long tempoPassado = 0;
+    long tempoPassado = LoginActivity.tempo;
     float distanciaEmMetros = LoginActivity.distancia;
     boolean pausarMissao = false, introCompleta = false, apiceCompleta = false, missaoCompleta = false;
     float kmIntro, kmApice, kmConclusao;
@@ -117,6 +117,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         gpsTrackerHelper = new GpsTrackerHelper(this);
 
         textViewTempoValor.setText(String.valueOf(df.format(LoginActivity.distancia)));
+        chronometerTempoJogo.setBase(Long.valueOf(LoginActivity.tempo));
 
         //definindo em que momento o timer inicia e tempo para ser repetido
         timer.schedule(timerTask, 2000, 5000);
@@ -175,7 +176,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                 System.err.println("DEU RUIM NO GPS");
                 e.printStackTrace();
             } finally {
-                for(int i = 0; i < pontoList.size()-1; i++){
+                for (int i = 0; i < pontoList.size()-1; i++) {
                     Location location = new Location("");
                     location.setLatitude(pontoList.get(i).latitude);
                     location.setLongitude(pontoList.get(i).longitude);
@@ -188,14 +189,16 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                 }
             }
 
+            distanciaEmMetros /= 1000;
             LoginActivity.distancia = distanciaEmMetros;
+            LoginActivity.tempo = chronometerTempoJogo.getBase();
             MediaPlayer mp;
 
             if (distanciaEmMetros >= kmIntro && distanciaEmMetros < kmApice && !introCompleta) {
                 introCompleta = true;
                 conclusaoIntro = chronometerTempoJogo.getBase();
 
-                mp = MediaPlayer.create(MissaoActivity.this, R.raw.starlight);
+                mp = MediaPlayer.create(MissaoActivity.this, R.raw.battle001);
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
@@ -207,7 +210,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                 apiceCompleta = true;
                 conclusaoApice = chronometerTempoJogo.getBase();
 
-                mp = MediaPlayer.create(MissaoActivity.this, R.raw.starlight);
+                mp = MediaPlayer.create(MissaoActivity.this, R.raw.battle001);
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
@@ -221,7 +224,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                 conclusao = chronometerTempoJogo.getBase();
                 atualizarDados();
 
-                mp = MediaPlayer.create(MissaoActivity.this, R.raw.starlight);
+                mp = MediaPlayer.create(MissaoActivity.this, R.raw.battle001);
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
@@ -350,6 +353,8 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         timer.cancel();
         m_handler.removeCallbacks(m_handlerTask);
         //atualizando jogador e missaoJogador
+        LoginActivity.distancia = 0;
+        LoginActivity.tempo = 0;
         jogador.setHorasJogadas(conclusao + jogador.getHorasJogadas());
         float distanciaTotal = distanciaEmMetros + jogador.getKmCaminhados();
         jogador.setKmCaminhados(distanciaTotal);
