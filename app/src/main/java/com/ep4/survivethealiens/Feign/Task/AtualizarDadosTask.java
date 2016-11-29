@@ -85,7 +85,6 @@ public class AtualizarDadosTask extends AsyncTask<Jogador, Void, Jogador> {
 
     @Override
     protected void onPostExecute(Jogador jogador) {
-        pDialog.dismiss();
         try {
             if(userVerified){
                 LoginActivity.jogador = this.jogador;

@@ -111,7 +111,5 @@ public class Jogador {
         return KmCaminhados;
     }
 
-    public void setKmCaminhados(float kmCaminhados) {
-        this.KmCaminhados = kmCaminhados;
-    }
+    public void setKmCaminhados(float kmCaminhados) { this.KmCaminhados = kmCaminhados; }
 }

@@ -84,7 +84,7 @@ public class AutenticarJogadorTask extends AsyncTask<Credenciais, Void, Jogador>
     protected void onPostExecute(Jogador jogador) {
         try {
             pDialog.dismiss();
-            if(userVerified){
+            if(userVerified) {
 //                GetMissaoByJogadorTask getMissaoByJogadorTask = new GetMissaoByJogadorTask(myActivity, myContext);
 //                getMissaoByJogadorTask.execute(jogador.getId());
 
@@ -102,13 +102,12 @@ public class AutenticarJogadorTask extends AsyncTask<Credenciais, Void, Jogador>
                 SaveSharedPreference.setJogador(myActivity, jogador);
                 myActivity.startActivity(intent);
                 Toast.makeText(myContext, "Olá de novo, " + jogador.getApelido() + "!", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 //ou e-mail em uso
                 Toast.makeText(myContext, "Houve um problema ao efetuar a autenticação. Tente novamente.", Toast.LENGTH_LONG).show();
             }
         }catch (Exception e){
             e.printStackTrace();
         }
-        //pDialogMissoes.dismiss();
     }
 }

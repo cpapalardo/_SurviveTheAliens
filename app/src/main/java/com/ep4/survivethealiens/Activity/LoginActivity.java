@@ -30,8 +30,6 @@ public class LoginActivity extends AppCompatActivity {
     EditText editTextSenha;
     TextView textViewAppName;
     public static Jogador jogador;
-    public static float distancia = 0;
-    public static long tempo = 0;
     AutenticarJogadorTask autenticarJogadorTask;
     public static ArrayList<MissaoJogador> missaoJogadorList;
     public static ArrayList<Missao> missaoList;

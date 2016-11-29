@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/infotext"
-                android:text="Distância"
+                android:text="Distância (Km)"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_marginTop="15dp"
