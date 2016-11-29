@@ -69,7 +69,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
     boolean pausarMissao, introCompleta, apiceCompleta, missaoCompleta;
     float kmIntro, kmApice, kmConclusao;
     long conclusaoIntro, conclusaoApice, conclusao;
-    Button buttonContinuar, buttonPausar;
+    Button buttonContinuar, buttonPausar, buttonPrimeiraParte, buttonSegundaParte, buttonUltimaParte;
     Jogador jogador;
     Location pontoAnterior = new Location("");
     DecimalFormat df = new DecimalFormat("0.##");
@@ -112,6 +112,12 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         chronometerTempoJogo = (Chronometer) findViewById(R.id.chronometerTempoJogo);
         buttonContinuar = (Button) findViewById(R.id.buttonContinuar);
         buttonPausar = (Button) findViewById(R.id.buttonPausar);
+        buttonPrimeiraParte = (Button) findViewById(R.id.buttonPrimeiraParte);
+        buttonSegundaParte = (Button) findViewById(R.id.buttonSegundaParte);
+        buttonUltimaParte = (Button) findViewById(R.id.buttonUltimaParte);
+        buttonPrimeiraParte.setEnabled(missao.isIntroCompleta());
+        buttonSegundaParte.setEnabled(missao.isApiceCompleta());
+        buttonUltimaParte.setEnabled(missao.isMissaoCompleta());
 
         //pegando fragmento do mapa
         mapFragment = (MapFragment) getFragmentManager()
@@ -174,6 +180,8 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                             distanciaEmMetros += (pontoAnterior.distanceTo(l) / 1000);
                             pontoAnterior = l;
                         }
+
+                        if (introCompleta) buttonPrimeiraParte.setEnabled(true);
                     } else {
                         // Toast.makeText(context, "DEU RUIM NO ELSE", Toast.LENGTH_SHORT).show();
                         //Log.d("PASSANDO LOCALIZAÇÃO", "DEU RUIM NO ELSE");
@@ -200,7 +208,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
             }
 
             //LoginActivity.distancia = distanciaEmMetros;
-            if (isGPSEnabled) {
+            //if (isGPSEnabled) {
                 if (missao.getId() == 1) {
                     if (distanciaEmMetros >= kmIntro && distanciaEmMetros < kmApice && !introCompleta) {
                         missao.setIntroCompleta(true);
@@ -219,6 +227,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                         missao.setApiceCompleta(true);
                         apiceCompleta = true;
                         conclusaoApice = chronometerTempoJogo.getBase();
+                        //buttonSegundaParte.setEnabled(missao.isApiceCompleta());
 
                         mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_2);
                         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -233,6 +242,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                         missaoCompleta = true;
                         chronometerTempoJogo.stop();
                         conclusao = chronometerTempoJogo.getBase() - SystemClock.elapsedRealtime();
+                        //buttonUltimaParte.setEnabled(missao.isMissaoCompleta());
 
                         mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_3);
                         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -246,7 +256,9 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                         atualizarDados();
                     }
                 }
-            }
+            //} else {
+            //    buildAlertMessageNoGps();
+            //}
         }
     };
 
@@ -275,6 +287,12 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             isGPSEnabled = false;
             buildAlertMessageNoGps();
+
+            if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                isGPSEnabled = false;
+            } else {
+                isGPSEnabled = true;
+            }
         } else {
             isGPSEnabled = true;
         }
@@ -384,6 +402,51 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         new AtualizarDadosTask(this, this).execute(jogador);
     }
 
+    public void ouvirParteUm(View v) {
+        if (mp != null) {
+            mp.reset();
+        }
+
+        mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_1);
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+            }
+        });
+        mp.start();
+    }
+
+    public void ouvirParteDois(View v) {
+        if (mp != null) {
+            mp.reset();
+        }
+
+        mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_2);
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+            }
+        });
+        mp.start();
+    }
+
+    public void ouvirFinal(View v) {
+        if (mp != null) {
+            mp.reset();
+        }
+
+        mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_3);
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+            }
+        });
+        mp.start();
+    }
+
     public void pausar(View view){
         pausarMissao = true;
         tempoPassado = chronometerTempoJogo.getBase() - SystemClock.elapsedRealtime();
@@ -420,12 +483,11 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         missao.setIntroCompleta(introCompleta);
         missao.setApiceCompleta(apiceCompleta);
         missao.setMissaoCompleta(missaoCompleta);
+
         if (mp != null) {
-            if (mp.isPlaying()) {
-                mp.getAudioSessionId();
-                mp.reset();
-            }
+            mp.reset();
         }
+
         super.onBackPressed();
     }
 }

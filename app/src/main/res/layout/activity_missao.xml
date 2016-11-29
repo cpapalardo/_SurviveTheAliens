@@ -114,6 +114,60 @@
                 style="@style/Widget.AppCompat.Button.Colored"
                 />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="História - Primeira Parte (Ouça novamente)"
+                android:id="@+id/buttonPrimeiraParte"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:onClick="ouvirParteUm"
+                style="@style/Widget.AppCompat.Button.Colored"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="História - Segunda Parte (Ouça novamente)"
+                android:id="@+id/buttonSegundaParte"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:onClick="ouvirParteDois"
+                style="@style/Widget.AppCompat.Button.Colored"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="História - Final (Ouça novamente)"
+                android:id="@+id/buttonUltimaParte"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:onClick="ouvirFinal"
+                style="@style/Widget.AppCompat.Button.Colored"
+                />
+        </LinearLayout>
     </LinearLayout>
 
    <!-- <Button
