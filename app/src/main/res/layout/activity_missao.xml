@@ -127,8 +127,8 @@
                 android:text="História - Primeira Parte (Ouça novamente)"
                 android:id="@+id/buttonPrimeiraParte"
                 android:layout_weight="1"
-                android:enabled="false"
                 android:onClick="ouvirParteUm"
+                android:visibility="invisible"
                 style="@style/Widget.AppCompat.Button.Colored"
                 />
         </LinearLayout>
@@ -145,8 +145,8 @@
                 android:text="História - Segunda Parte (Ouça novamente)"
                 android:id="@+id/buttonSegundaParte"
                 android:layout_weight="1"
-                android:enabled="false"
                 android:onClick="ouvirParteDois"
+                android:visibility="invisible"
                 style="@style/Widget.AppCompat.Button.Colored"
                 />
         </LinearLayout>
@@ -163,8 +163,8 @@
                 android:text="História - Final (Ouça novamente)"
                 android:id="@+id/buttonUltimaParte"
                 android:layout_weight="1"
-                android:enabled="false"
                 android:onClick="ouvirFinal"
+                android:visibility="invisible"
                 style="@style/Widget.AppCompat.Button.Colored"
                 />
         </LinearLayout>

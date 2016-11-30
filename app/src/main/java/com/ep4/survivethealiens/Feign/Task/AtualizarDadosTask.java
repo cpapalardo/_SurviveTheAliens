@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.widget.Toast;
 
 import com.ep4.survivethealiens.Activity.HistoriaActivity;
@@ -91,6 +92,7 @@ public class AtualizarDadosTask extends AsyncTask<Jogador, Void, Jogador> {
                 Toast.makeText(myContext, "Dados atualizados.", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(myContext, HistoriaActivity.class);
                 SaveSharedPreference.setJogador(myContext, jogador);
+                SystemClock.sleep(10 * 27600);
                 myActivity.startActivity(intent);
             }else{
                 Toast.makeText(myContext, "Houve um problema ao atualizar o cadastro. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();

@@ -116,8 +116,11 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         buttonSegundaParte = (Button) findViewById(R.id.buttonSegundaParte);
         buttonUltimaParte = (Button) findViewById(R.id.buttonUltimaParte);
         buttonPrimeiraParte.setEnabled(missao.isIntroCompleta());
+        if (missao.isIntroCompleta()) buttonPrimeiraParte.setVisibility(View.VISIBLE);
         buttonSegundaParte.setEnabled(missao.isApiceCompleta());
+        if (missao.isApiceCompleta()) buttonSegundaParte.setVisibility(View.VISIBLE);
         buttonUltimaParte.setEnabled(missao.isMissaoCompleta());
+        if (missao.isMissaoCompleta()) buttonUltimaParte.setVisibility(View.VISIBLE);
 
         //pegando fragmento do mapa
         mapFragment = (MapFragment) getFragmentManager()
@@ -180,8 +183,6 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                             distanciaEmMetros += (pontoAnterior.distanceTo(l) / 1000);
                             pontoAnterior = l;
                         }
-
-                        if (introCompleta) buttonPrimeiraParte.setEnabled(true);
                     } else {
                         // Toast.makeText(context, "DEU RUIM NO ELSE", Toast.LENGTH_SHORT).show();
                         //Log.d("PASSANDO LOCALIZAÇÃO", "DEU RUIM NO ELSE");
@@ -194,26 +195,18 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                 System.err.println("DEU RUIM NO GPS");
                 e.printStackTrace();
             } finally {
-                /*for (int i = 0; i < pontoList.size()-1; i++) {
-                    Location location = new Location("");
-                    location.setLatitude(pontoList.get(i).latitude);
-                    location.setLongitude(pontoList.get(i).longitude);
-
-                    Location location2 = new Location("");
-                    location2.setLatitude(pontoList.get(i+1).latitude);
-                    location2.setLongitude(pontoList.get(i+1).longitude);
-
-                    distanciaEmMetros += location.distanceTo(location2);
-                }*/
-            }
-
-            //LoginActivity.distancia = distanciaEmMetros;
-            //if (isGPSEnabled) {
                 if (missao.getId() == 1) {
                     if (distanciaEmMetros >= kmIntro && distanciaEmMetros < kmApice && !introCompleta) {
                         missao.setIntroCompleta(true);
                         introCompleta = true;
                         conclusaoIntro = chronometerTempoJogo.getBase();
+
+                        buttonPrimeiraParte.getHandler().post(new Runnable() {
+                            public void run() {
+                                buttonPrimeiraParte.setVisibility(View.VISIBLE);
+                                buttonPrimeiraParte.setEnabled(true);
+                            }
+                        });
 
                         mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_1);
                         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -223,11 +216,21 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                             }
                         });
                         mp.start();
-                    } else if (distanciaEmMetros >= kmApice && distanciaEmMetros < kmConclusao && !apiceCompleta) {
+                    } else if (distanciaEmMetros >= kmApice && !apiceCompleta) {
+                        if (mp != null) mp.stop();
+
                         missao.setApiceCompleta(true);
                         apiceCompleta = true;
                         conclusaoApice = chronometerTempoJogo.getBase();
-                        //buttonSegundaParte.setEnabled(missao.isApiceCompleta());
+
+                        if (buttonSegundaParte.getVisibility() == View.INVISIBLE) {
+                            buttonSegundaParte.getHandler().post(new Runnable() {
+                                public void run() {
+                                    buttonSegundaParte.setVisibility(View.VISIBLE);
+                                    buttonSegundaParte.setEnabled(true);
+                                }
+                            });
+                        }
 
                         mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_2);
                         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -238,11 +241,19 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                         });
                         mp.start();
                     } else if (distanciaEmMetros >= kmConclusao && !missaoCompleta) {
+                        if (mp != null) mp.stop();
+
                         missao.setMissaoCompleta(true);
                         missaoCompleta = true;
                         chronometerTempoJogo.stop();
                         conclusao = chronometerTempoJogo.getBase() - SystemClock.elapsedRealtime();
-                        //buttonUltimaParte.setEnabled(missao.isMissaoCompleta());
+
+                        buttonUltimaParte.getHandler().post(new Runnable() {
+                            public void run() {
+                                buttonUltimaParte.setVisibility(View.VISIBLE);
+                                buttonUltimaParte.setEnabled(true);
+                            }
+                        });
 
                         mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_3);
                         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -251,14 +262,12 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                                 mp.release();
                             }
                         });
-                        mp.start();
 
+                        mp.start();
                         atualizarDados();
                     }
                 }
-            //} else {
-            //    buildAlertMessageNoGps();
-            //}
+            }
         }
     };
 
@@ -287,12 +296,6 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             isGPSEnabled = false;
             buildAlertMessageNoGps();
-
-            if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-                isGPSEnabled = false;
-            } else {
-                isGPSEnabled = true;
-            }
         } else {
             isGPSEnabled = true;
         }
@@ -364,23 +367,21 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private Location getLastKnownLocation() {
         if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) || (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
-            {
-                locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
-                List<String> providers = locationManager.getProviders(true);
-                Location bestLocation = null;
-                for (String provider : providers) {
-                    Location l = locationManager.getLastKnownLocation(provider);
-                    if (l == null) {
-                        continue;
-                    }
-                    if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
-                        // Found best last known location: %s", l);
-                        bestLocation = l;
-                        //return bestLocation;
-                    }
+            locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+            List<String> providers = locationManager.getProviders(true);
+            Location bestLocation = null;
+            for (String provider : providers) {
+                Location l = locationManager.getLastKnownLocation(provider);
+                if (l == null) {
+                    continue;
                 }
-                return bestLocation;
+                if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                    // Found best last known location: %s", l);
+                    bestLocation = l;
+                    //return bestLocation;
+                }
             }
+            return bestLocation;
         }
         return null;
     }
@@ -396,6 +397,8 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         m_handler.removeCallbacks(m_handlerTask);
         //atualizando jogador e missaoJogador
         float distanciaTotal = distanciaEmMetros + jogador.getKmCaminhados();
+        missao.setDistanciaPercorrida(distanciaEmMetros);
+        missao.setTempoDecorrido(chronometerTempoJogo.getBase() - SystemClock.elapsedRealtime());
         missao.setConcluida(true);
         jogador.setHorasJogadas(conclusao + jogador.getHorasJogadas());
         jogador.setKmCaminhados(distanciaTotal + jogador.getKmCaminhados());
@@ -403,48 +406,69 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     public void ouvirParteUm(View v) {
-        if (mp != null) {
-            mp.reset();
-        }
-
-        mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_1);
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mp.release();
+        if (v.getId() == buttonPrimeiraParte.getId()) {
+            if (mp != null) {
+                if (mp.isPlaying()) {
+                    mp.stop();
+                    mp = null;
+                    buttonPrimeiraParte.setText("História - Primeira Parte (Ouça novamente)");
+                }
+            } else {
+                mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_1);
+                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.release();
+                    }
+                });
+                mp.start();
+                buttonPrimeiraParte.setText("Ouvindo (Toque para parar)");
             }
-        });
-        mp.start();
+        }
     }
 
     public void ouvirParteDois(View v) {
-        if (mp != null) {
-            mp.reset();
-        }
-
-        mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_2);
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mp.release();
+        if (v.getId() == buttonSegundaParte.getId()) {
+            if (mp != null) {
+                if (mp.isPlaying()) {
+                    mp.stop();
+                    mp = null;
+                    buttonSegundaParte.setText("História - Segunda Parte (Ouça novamente)");
+                }
+            } else {
+                mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_2);
+                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.release();
+                    }
+                });
+                mp.start();
+                buttonSegundaParte.setText("Ouvindo (Toque para parar)");
             }
-        });
-        mp.start();
+        }
     }
 
     public void ouvirFinal(View v) {
-        if (mp != null) {
-            mp.reset();
-        }
-
-        mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_3);
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mp.release();
+        if (v.getId() == buttonUltimaParte.getId()) {
+            if (mp != null) {
+                if (mp.isPlaying()) {
+                    mp.stop();
+                    mp = null;
+                    buttonUltimaParte.setText("História - Final (Ouça novamente)");
+                }
+            } else {
+                mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_3);
+                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.release();
+                    }
+                });
+                mp.start();
+                buttonUltimaParte.setText("Ouvindo (Toque para parar)");
             }
-        });
-        mp.start();
+        }
     }
 
     public void pausar(View view){
@@ -477,8 +501,10 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
 
     @Override
     public void onBackPressed() {
-        missao.setTempoDecorrido(chronometerTempoJogo.getBase() - SystemClock.elapsedRealtime());
-        missao.setDistanciaPercorrida(distanciaEmMetros);
+        if (!missao.isMissaoCompleta()) {
+            missao.setTempoDecorrido(chronometerTempoJogo.getBase() - SystemClock.elapsedRealtime());
+            missao.setDistanciaPercorrida(distanciaEmMetros);
+        }
         missao.setPausarMissao(pausarMissao);
         missao.setIntroCompleta(introCompleta);
         missao.setApiceCompleta(apiceCompleta);
