@@ -116,11 +116,13 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
         buttonSegundaParte = (Button) findViewById(R.id.buttonSegundaParte);
         buttonUltimaParte = (Button) findViewById(R.id.buttonUltimaParte);
         buttonPrimeiraParte.setEnabled(missao.isIntroCompleta());
-        if (missao.isIntroCompleta()) buttonPrimeiraParte.setVisibility(View.VISIBLE);
         buttonSegundaParte.setEnabled(missao.isApiceCompleta());
-        if (missao.isApiceCompleta()) buttonSegundaParte.setVisibility(View.VISIBLE);
         buttonUltimaParte.setEnabled(missao.isMissaoCompleta());
-        if (missao.isMissaoCompleta()) buttonUltimaParte.setVisibility(View.VISIBLE);
+        if (missao.isMissaoCompleta()) {
+            buttonUltimaParte.setVisibility(View.VISIBLE);
+            buttonSegundaParte.setVisibility(View.VISIBLE);
+            buttonPrimeiraParte.setVisibility(View.VISIBLE);
+        }
 
         //pegando fragmento do mapa
         mapFragment = (MapFragment) getFragmentManager()
@@ -196,17 +198,10 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                 e.printStackTrace();
             } finally {
                 if (missao.getId() == 1) {
-                    if (distanciaEmMetros >= kmIntro && distanciaEmMetros < kmApice && !introCompleta) {
+                    if (distanciaEmMetros >= kmIntro && !introCompleta) {
                         missao.setIntroCompleta(true);
                         introCompleta = true;
                         conclusaoIntro = chronometerTempoJogo.getBase();
-
-                        buttonPrimeiraParte.getHandler().post(new Runnable() {
-                            public void run() {
-                                buttonPrimeiraParte.setVisibility(View.VISIBLE);
-                                buttonPrimeiraParte.setEnabled(true);
-                            }
-                        });
 
                         mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_1);
                         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -222,15 +217,6 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                         missao.setApiceCompleta(true);
                         apiceCompleta = true;
                         conclusaoApice = chronometerTempoJogo.getBase();
-
-                        if (buttonSegundaParte.getVisibility() == View.INVISIBLE) {
-                            buttonSegundaParte.getHandler().post(new Runnable() {
-                                public void run() {
-                                    buttonSegundaParte.setVisibility(View.VISIBLE);
-                                    buttonSegundaParte.setEnabled(true);
-                                }
-                            });
-                        }
 
                         mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_2);
                         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -248,13 +234,6 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                         chronometerTempoJogo.stop();
                         conclusao = chronometerTempoJogo.getBase() - SystemClock.elapsedRealtime();
 
-                        buttonUltimaParte.getHandler().post(new Runnable() {
-                            public void run() {
-                                buttonUltimaParte.setVisibility(View.VISIBLE);
-                                buttonUltimaParte.setEnabled(true);
-                            }
-                        });
-
                         mp = MediaPlayer.create(MissaoActivity.this, R.raw.missao_1_3);
                         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
@@ -262,8 +241,8 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
                                 mp.release();
                             }
                         });
-
                         mp.start();
+
                         atualizarDados();
                     }
                 }
@@ -387,7 +366,7 @@ public class MissaoActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged (Location location) {
 
     }
 
